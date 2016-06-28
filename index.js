@@ -23,6 +23,8 @@ app.get('/', function(req, res) {
 
 app.use(express.static('static'));
 
+var runGame;
+
 var refreshLoop = setInterval(function() {
   io.to('lobby').emit('refresh-member-list', Players.getList());
 }, 1000);
@@ -38,9 +40,9 @@ var canStartGame = function ( socket ) {
   if ( gameInProgress ) {
     throw new Error('a game is already in progress');
   }
-  else if (Players.getArr().length < 3) {
-    throw new Error('must have at least three players to start');
-  }
+  //else if (Players.getArr().length < 3) {
+  //  throw new Error('must have at least three players to start');
+  //}
   else {
     return true;
   }
@@ -93,10 +95,6 @@ var runGame = function( players ) {
 
   var game = new Game( players );
 
-  game.notifyClients();
-  game.updateLeaderboards();
-  game.incrementRound();
-  game.getMove();
 }
 
 io.on('connection', onNewConnection);

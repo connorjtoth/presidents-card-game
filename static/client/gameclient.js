@@ -28,7 +28,7 @@ var createLeaderboardEntry = function ( leaderstat )
 
 gameClient.printLeaderboard = function ( leaderstats )
 {
-  var plrList = $('#player-list');
+  var plrList = $('.player-list');
   plrList.empty();
   
   for (var datum of leaderstats)
@@ -68,7 +68,7 @@ gameClient.printMessage = function ( text )
 
 // hand functions
 var stack = new Table();
-var inv = $('#inventory');
+var inv = $('.inventory');
 
 
 var pushToStack = function ( card, guiMap )
@@ -103,6 +103,7 @@ var pushToStack = function ( card, guiMap )
 
 gameClient.updateHand = function ( hand )
 {
+  console.log('updating hand');
   var guiMap = new Map();
   var cardGuis = new Array();
 
@@ -149,12 +150,12 @@ gameClient.onPlayClicked = function()
 
 gameClient.onGetCardSelections = function ( )
 {
-  $('#play').click(debounce(gameClient.onPlayClicked, 1000 ));
+  $('.play').click(debounce(gameClient.onPlayClicked, 1000 ));
 };
 
 gameClient.onDisableCardSelections = function ( )
 {
-  $('#play').off('click');
+  $('.play').off('click');
 };
 
 socket.on('update-leaderboard', gameClient.printLeaderboard);

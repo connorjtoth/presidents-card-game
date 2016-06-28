@@ -1,10 +1,11 @@
 var DiscardPile = require('./discardpile.js')
+var Card = require('./card.js');
+var Deck = require('./deck.js');
 
 var NUM_OF_JOKERS = 2;
 var TIMES_TO_SHUFFLE = 7;
 var STARTING_CARD = new Card('C', 3);
 
-var orderPlayers;
 
 var Game = function ( players ) {
   console.log('starting new game');
@@ -18,10 +19,11 @@ var Game = function ( players ) {
   };
 
   this.roundCount = 0; // round number
-  this.discard = new DiscardPile();//TODO
+  this.discard = new DiscardPile();
   this.lastActivePlayer = null;
   this.currentPlayer = null;
   this.playerNum = 0;
+  this.moveTimer = null;
 
   /* Initialization and setup */
   console.log('setting up the game');
@@ -41,6 +43,12 @@ var Game = function ( players ) {
   }
   game.currentPlayer = game.players.inGame[0];
 
+  /* Inform client */
+  game.notifyClients();
+  game.updateLeaderboards();
+  game.startRound();
+
+
   return this;
 }
 
@@ -52,7 +60,7 @@ Game.prototype.notifyClients = function ( ) {
 
 /* PLAYER ORDERING */
 
-game.prototype.orderPlayers = function ( players ) {
+Game.prototype.orderPlayers = function ( players ) {
   var temp = new Array();
   var first = -1;
 
@@ -149,54 +157,36 @@ Game.prototype.skipPlayers = function ( n ) {
 }
 
 /* PLAYER MOVES */
-
-Game.prototype.getMove = function() {
+Game.prototype.getMove = function (callback) {
   var game = this;
   var player = game.currentPlayer;
-  return Promise.all([
-    Promise.resolve(true)
-      .then(function (res) {
-        console.log('get move');
-        player.socket.emit('message', 'it is your turn');
-      })
-      .then(function (res) {
-        console.log('waiting on ' + player.name);
-        player.socket.emit('allow-select-cards');
-        player.socket.addListener('card-choices', game.onCardsSubmitted);
-      }),
-    Promise.resolve(true)
-      .then(function (res) {
-        var p = this;
-        setTimeout(function() {
-            Promise.reject('timed out');
-          }, 50000);
-      })
-    ]).catch(function (err) {
-    console.log('ERROR', err);
-  });
-};
+
+  console.log('get move');
+  player.socket.emit('message', 'it is your turn');
+
+  console.log('waiting on ' + player.name);
+  player.socket.emit('allow-select-cards');
+  player.socket.addListener('card-choices', game.onCardsSubmitted);
+
+  game.moveTimer = setTimeout(function() {
+    console.log(player.name + '\'s move timed out');
+    game.endMove();
+  }, 60 * 1000);
+}
 
 
-Game.prototype.endMove = function ( ) {
+Game.prototype.endMove = function (callback) {
   console.log(' end the current move ');
   var game = this;
   var player = game.currentPlayer;
+
+  clearTimeout(game.moveTimer);
 
   player.socket.removeListener('card-choices');
   player.socket.emit('disallow-select-cards');
 
   //notify clients of changes
   game.updateLeaderboards();
-
-  if (player.hand.arr().length === 0) {
-    game.players.inGame.remove(player);
-    game.players.out.push(player);
-    //end game
-  }
-  else {
-    game.getNextMove();
-    //end turn
-  }
 }
 
 
@@ -207,7 +197,7 @@ Game.prototype.validateMove = function ( moveCards ) {
   var player = game.currentPlayer;
   
   //ensure a correct number of cards are being played
-  if (moveCards.length != round.quantity) {
+  if (moveCards.length != game.round.quantity) {
     throw new Error( player.name + ' played ' + 
       moveCards.length + ' cards instead of ' + round.quantity);
   }
@@ -269,8 +259,8 @@ Game.prototype.onCardsSubmitted = function( cardsArr ) {
     player.updateClientHand();
 
     var playDetails = new PlayStruct(player, cardsArr);
-    game.discardPile.push(playDetails);
-    game.endMove(game);
+    game.discardPile.addPlay(playDetails);
+    game.endMove();
   }
   catch (err) {
     console.log('cards are not valid');
@@ -287,27 +277,24 @@ Game.prototype.startRound = function ( ) {
   var game = this;
 
   var quantity = 0;
-  var play = 0;
-
 
 
   // MID ROUD
+  game.getMove( function afterMove (callback, err) {
+    if (discard.size() > 1) {
+      var roundWinner = game.lastActivePlayer;
+      game.setPlayer(roundWinner);
+    
+      if ( !roundWinner.hand.arr().length === 0 ) {
+        game.nextPlayer();
+      }
 
-
-
-
-  // POST ROUND CLEANUP
-
-  // make the next player the last person to play
-  var roundWinner = game.lastActivePlayer;
-  game.setPlayer(roundWinner);
-  if ( !roundWinner.hasCards() ) {
-    game.nextPlayer();
-    game.onOutOfCards(roundWinner);
-  }
-
-  //determine to end the game
-
+      //determine to end the game
+      if ( roundWinner.hand.arr().length === 0 ) {
+        //END ROUND
+      }
+    }
+  });
 }
 
 module.exports = Game;

@@ -26,4 +26,4 @@ DiscardPile.prototype.getRank = function ( n ) {
 }
 
 
-module.exportss = DiscardPile;
+module.exports = DiscardPile;

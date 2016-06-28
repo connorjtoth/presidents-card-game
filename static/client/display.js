@@ -175,7 +175,7 @@ $(document).ready(function()
   {
     exports.positionCards = function( cardGuis )
     {
-      var invDiv = $('#inventory');
+      var invDiv = $('.inventory');
 
       var invWidth = invDiv.width(),
           invHeight = invDiv.height(),

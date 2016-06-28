@@ -1,7 +1,5 @@
 /* game.js */
 
-var Card = require('./card.js');
-var Deck = require('./deck.js');
 var Player = require('./player.js');
 var Players = require('./players.js')();
 var Constants = require('./constants_server.js');
@@ -21,11 +19,6 @@ var GameTable = function ( players ) {
   this.gameCount = 0; // count of games
   this.game = new Game(this.players.playing);
 };
-
-
-
-
-
 
 
 module.exports = GameTable;
