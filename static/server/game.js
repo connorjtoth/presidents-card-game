@@ -1,3 +1,5 @@
+var DiscardPile = require('./discardpile.js')
+
 var NUM_OF_JOKERS = 2;
 var TIMES_TO_SHUFFLE = 7;
 var STARTING_CARD = new Card('C', 3);
@@ -16,7 +18,7 @@ var Game = function ( players ) {
   };
 
   this.roundCount = 0; // round number
-  this.discardPile = ;//TODO
+  this.discard = new DiscardPile();//TODO
   this.lastActivePlayer = null;
   this.currentPlayer = null;
   this.playerNum = 0;
@@ -30,7 +32,7 @@ var Game = function ( players ) {
   deck.dealTo(game.players.inGame);
 
   //order players
-  orderPlayers(game.players.inGame);
+  game.orderPlayers(game.players.inGame);
   game.players.order = game.players.inGame;
 
   //update hands and select starting player
@@ -42,7 +44,15 @@ var Game = function ( players ) {
   return this;
 }
 
-orderPlayers = function ( players ) {
+Game.prototype.notifyClients = function ( ) {
+  for (var player of this.players.inGame) {
+    player.socket.emit('start-game');
+  }
+}
+
+/* PLAYER ORDERING */
+
+game.prototype.orderPlayers = function ( players ) {
   var temp = new Array();
   var first = -1;
 
@@ -66,6 +76,8 @@ orderPlayers = function ( players ) {
 
   players = temp;
 };
+
+/* LEADERBOARD */
 
 Game.prototype.getLeaderboard = function ( ) {
   var game = this;
@@ -94,6 +106,24 @@ Game.prototype.updateLeaderboards = function ( ) {
   }
 }
 
+/* CHANGING PLAYERS */
+
+Game.prototype.numPlayersToSkip = function ( ) {
+  var game = this;
+
+  //hard coding is shorter than iteration
+  if ( discard.getRank(0) == discard.getRank(1) ) {
+    if ( discard.getRank(0) == discard.getRank(2) ) {
+      if (discard.getRank(0) == discard.getRank(3) ) {
+        //end round
+      }
+      else { return 2; }
+    }
+    else { return 1; }
+  }
+  else { return 0; }
+}
+
 Game.prototype.nextPlayer = function() {
 
   var game = this;
@@ -118,34 +148,33 @@ Game.prototype.skipPlayers = function ( n ) {
   }
 }
 
-Game.prototype.startRound = function ( ) {
+/* PLAYER MOVES */
+
+Game.prototype.getMove = function() {
   var game = this;
-
-  var quantity = 0;
-  var play = 0;
-
-
-  //
-  //PRE GAME and first move
-
-  // MID ROUD
-
-
-
-
-  // POST ROUND CLEANUP
-
-  // make the next player the last person to play
-  var roundWinner = game.lastActivePlayer;
-  game.setPlayer(roundWinner);
-  if ( !roundWinner.hasCards() ) {
-    game.nextPlayer();
-    game.onOutOfCards(roundWinner);
-  }
-
-  //determine to end the game
-
-}
+  var player = game.currentPlayer;
+  return Promise.all([
+    Promise.resolve(true)
+      .then(function (res) {
+        console.log('get move');
+        player.socket.emit('message', 'it is your turn');
+      })
+      .then(function (res) {
+        console.log('waiting on ' + player.name);
+        player.socket.emit('allow-select-cards');
+        player.socket.addListener('card-choices', game.onCardsSubmitted);
+      }),
+    Promise.resolve(true)
+      .then(function (res) {
+        var p = this;
+        setTimeout(function() {
+            Promise.reject('timed out');
+          }, 50000);
+      })
+    ]).catch(function (err) {
+    console.log('ERROR', err);
+  });
+};
 
 
 Game.prototype.endMove = function ( ) {
@@ -169,74 +198,6 @@ Game.prototype.endMove = function ( ) {
     //end turn
   }
 }
-
-
-Game.prototype.numPlayersToSkip = function ( ) {
-  var game = this;
-
-  if (discardPile[0] == discardPile[1]) {
-    if (discardPile[0] == discardPile[2]) {
-      if (discardPile[0] == discardPile[3]) {
-        //end round
-      }
-      else { return 2; }
-    }
-    else { return 1; }
-  }
-  else { return 0; }
-}
-
-var onCardsSubmitted = function( cardsArr, game ) {
-  console.log('on cards submitted');
-  var player = game.currentPlayer;
-  console.log('cards chosen: ', cardsArr);
-
-  try {
-    game.validateMove(cardsArr);
-    console.log('cards are valid');
-    player.hand.removeSet(cardsArr);
-    player.updateClientHand();
-
-    var playDetails = new PlayStruct(player, cardsArr);
-    game.discardPile.push(playDetails);
-    game.endMove(game);
-  }
-  catch (err) {
-    console.log('cards are not valid');
-    player.socket.emit('message', "Error" + err);
-    console.log(err);
-  }
-};
-
-
-Game.prototype.getMove = function() {
-  var game = this;
-  var player = game.currentPlayer;
-  return Promise.all([
-    Promise.resolve(true)
-      .then(function (res) {
-        console.log('get move');
-        player.socket.emit('message', 'it is your turn');
-      })
-      .then(function (res) {
-        console.log('waiting on ' + player.name);
-        player.socket.emit('allow-select-cards');
-        player.socket.addListener('card-choices', function (a) {
-            onCardsSubmitted (a, game);
-          });
-      }),
-    Promise.resolve(true).then(function (res) {
-        var p = this;
-        setTimeout(function() {
-            Promise.reject('timed out');
-          }, 5000);
-      })
-    ]).catch(function (err) {
-    console.log('ERROR', err);
-  });
-};
-
-
 
 
 
@@ -292,8 +253,61 @@ Game.prototype.validateMove = function ( moveCards ) {
   return true;
 }
 
-Game.prototype.notifyClients = function ( ) {
-  for (var player of this.players.inGame) {
-    player.socket.emit('start-game');
+
+
+
+Game.prototype.onCardsSubmitted = function( cardsArr ) {
+  game = this;
+  console.log('on cards submitted');
+  var player = game.currentPlayer;
+  console.log('cards chosen: ', cardsArr);
+
+  try {
+    game.validateMove(cardsArr);
+    console.log('cards are valid');
+    player.hand.removeSet(cardsArr);
+    player.updateClientHand();
+
+    var playDetails = new PlayStruct(player, cardsArr);
+    game.discardPile.push(playDetails);
+    game.endMove(game);
   }
+  catch (err) {
+    console.log('cards are not valid');
+    player.socket.emit('message', "Error" + err);
+    console.log(err);
+  }
+};
+
+
+/* ROUND STUFF */
+
+
+Game.prototype.startRound = function ( ) {
+  var game = this;
+
+  var quantity = 0;
+  var play = 0;
+
+
+
+  // MID ROUD
+
+
+
+
+  // POST ROUND CLEANUP
+
+  // make the next player the last person to play
+  var roundWinner = game.lastActivePlayer;
+  game.setPlayer(roundWinner);
+  if ( !roundWinner.hasCards() ) {
+    game.nextPlayer();
+    game.onOutOfCards(roundWinner);
+  }
+
+  //determine to end the game
+
 }
+
+module.exports = Game;
