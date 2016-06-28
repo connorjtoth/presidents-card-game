@@ -1,0 +1,51 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:700);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
+
+$primary-color: #ddd;
+$secondary-color: #eee;
+$button-back-color: #0e0;
+$button-back-hover-color: #0d0;
+$button-text-color: #222;
+$button-text-hover-color: #eee;
+$primary-font: 'roboto slab';
+$card-font: 'source sans pro';
+
+@mixin transform($transforms) {
+     -moz-transform: $transforms;
+       -o-transform: $transforms;
+      -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+          transform: $transforms;
+}
+
+@mixin vertcenter() {
+  top: 50%;
+  @include transform(translatey(-50%));
+  position: absolute;
+}
+
+@mixin horcenter() {
+  left: 50%;
+  @include transform(translatex(-50%));
+  position: absolute;
+}
+
+@mixin horvertcenter() {
+  top:50%;
+  left: 50%;
+  @include transform(translate(-50%, -50%));
+  position: absolute;
+}
+
+@mixin block-hor-center() {
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin user-select($selection) {
+  -webkit-user-select: $selection;
+  -moz-user-select: $selection;
+  -ms-user-select: $selection;
+  user-select: $selection;
+}

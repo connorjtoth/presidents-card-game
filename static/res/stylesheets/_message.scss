@@ -1,0 +1,43 @@
+.message-wrapper
+{
+  width: 30rem;
+  height: 10rem;
+  border-radius: 1rem;
+  @include horvertcenter();
+  background-color: $secondary-color;
+
+  .header {
+    height: 20%;
+    width: 100%;
+    left: 1rem;
+    top: 10%;
+    position: absolute;
+  }
+
+  .content {
+    width: 100%;
+    height: 60%;
+    bottom: 10%;
+    background-color: $primary-color;
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  button {
+    width: 5rem;
+    height: 2.3rem;
+    border: 0;
+    background-color: $button-back-color;
+    border-radius: .25rem;
+    font-family: $primary-font;
+    bottom: 1rem;
+    @include horcenter();
+    color: $button-text-color;
+
+    &:hover {
+      background-color: $button-back-hover-color;
+       color: $button-text-hover-color;
+    }
+  }
+}

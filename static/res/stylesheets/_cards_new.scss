@@ -1,0 +1,93 @@
+.card {
+  background-color: #fff;
+  border-radius: 6px;
+
+  &,
+  & * {
+    border: 1px;
+    font-size: 100%;
+    padding: 0;
+    position: absolute;
+    @include user-select(none);
+  }
+
+  .corner { 
+    height: 25%;
+    width: 16.666666666666664%;
+  }
+
+  #lower-corner {
+    bottom: 3px;
+    right: 3px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+
+  #upper-corner {
+    left: 3px;
+    top: 3px;
+  }
+
+  .rank {
+    font-weight: bold;
+    height: 50%;
+    margin: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  &[id^='H'] .rank,
+  &[id^='D'] .rank {
+    color: #f00;
+  }
+
+  &[id^='C'] .rank,
+  &[id^='S'] .rank {
+    color: #000;
+  }
+
+  #joker-rank {
+    text-align: left;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+
+  #reg-rank {
+    text-align: center;
+  }
+
+  .corner-img {
+    height: 50%;
+    margin: 0;
+    top: calc(50% + 3px);
+    width: 100%;
+  }
+
+  &[id$='14'] .corner-img {
+    visibility: hidden;
+  }
+
+  .center {
+    height: 62.5%;
+    left: 25%;
+    top: 18.75%;
+    width: 50%;
+  }
+
+  .center-img {
+    height: 60%;
+    top: 20%;
+    width: 100%;
+  }
+
+  .gloss {
+    height: 100%;
+    opacity: 50%;
+    width: 100%;
+  }
+
+  &#selected {
+    top: -50px;
+  }
+
+}

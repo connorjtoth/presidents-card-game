@@ -1,0 +1,508 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:700);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.intro-wrapper {
+  width: 20rem;
+  height: 15rem;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #eee;
+  position: absolute;
+}
+.intro-wrapper .logo {
+  height: 5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.intro-wrapper .content {
+  width: 20rem;
+  height: 9rem;
+  bottom: 1.5rem;
+  background-color: #ddd;
+  position: absolute;
+}
+.intro-wrapper .content .form {
+  width: 100%;
+  top: 50%;
+  -moz-transform: translatey(-50%);
+  -o-transform: translatey(-50%);
+  -ms-transform: translatey(-50%);
+  -webkit-transform: translatey(-50%);
+  transform: translatey(-50%);
+  position: absolute;
+  font-family: "roboto slab";
+  font-weight: bold;
+}
+.intro-wrapper .content .form input {
+  border: 0;
+  background-color: #eee;
+  height: 2.3rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5rem;
+  font-family: "roboto slab";
+  padding: .25rem 1rem;
+  border-radius: .25rem;
+}
+.intro-wrapper .content .form button {
+  padding: .25rem 1.5rem;
+  height: 2.3rem;
+  margin: 1rem auto 0;
+  display: block;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25rem;
+  font-family: "roboto slab";
+  color: #222;
+}
+.intro-wrapper .content .form button:hover {
+  background-color: #0d0;
+  color: #eee;
+}
+
+* {
+  font-family: "roboto slab";
+}
+
+.members-wrapper {
+  width: 60rem;
+  border-radius: 1rem;
+  height: 30rem;
+  background-color: #eee;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+}
+.members-wrapper .header {
+  height: 5rem;
+  width: 60rem;
+  position: absolute;
+}
+.members-wrapper .header .logo {
+  height: 5rem;
+  /* 720 * 280 */
+  left: 3rem;
+  position: absolute;
+}
+.members-wrapper .content {
+  display: block;
+  left: 3rem;
+  height: 22rem;
+  bottom: 10%;
+  background-color: #ddd;
+  position: absolute;
+  overflow-y: scroll;
+}
+.members-wrapper .content .form {
+  width: 15rem;
+  left: 50%;
+  -moz-transform: translatex(-50%);
+  -o-transform: translatex(-50%);
+  -ms-transform: translatex(-50%);
+  -webkit-transform: translatex(-50%);
+  transform: translatex(-50%);
+  position: absolute;
+  font-family: "roboto slab";
+  font-weight: bold;
+  top: 25%;
+  height: 50%;
+  bottom: 25%;
+}
+.members-wrapper .content .form input {
+  border: 0;
+  background-color: #eee;
+  height: 2.3rem;
+  vertical-align: middle;
+  line-height: 1.5rem;
+  font-family: "roboto slab";
+  padding-left: 1rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  border-radius: .25rem;
+  width: 100%;
+}
+.members-wrapper .member-entry {
+  height: 3rem;
+  width: 54rem;
+  background-color: #f00;
+  margin: 0;
+}
+.members-wrapper .member-entry * {
+  height: 100%;
+  line-height: 3rem;
+  margin: 0;
+  border: 0;
+  float: left;
+  display: inline-block;
+  text-align: center;
+}
+.members-wrapper .member-entry .number {
+  width: 6rem;
+}
+.members-wrapper .member-entry .name {
+  width: 20rem;
+}
+.members-wrapper .member-entry .rank {
+  width: 16rem;
+}
+.members-wrapper .member-entry .actions button {
+  margin-left: calc(50% - 2.5rem);
+  margin-top: .35rem;
+  margin-bottom: .35rem;
+  height: 2rem;
+}
+.members-wrapper .member-entry:nth-of-type(odd) {
+  background-color: #ccc;
+}
+.members-wrapper .member-entry:nth-of-type(even) {
+  background-color: #ddd;
+}
+.members-wrapper .member-entry:nth-of-type(1) {
+  background-color: #aaa;
+}
+.members-wrapper .control-box {
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+}
+.members-wrapper .control-box * {
+  display: inline;
+}
+.members-wrapper button {
+  padding: 0rem .8rem;
+  height: 2rem;
+  min-width: 5rem;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25rem;
+  font-family: "roboto slab";
+  color: #222;
+  line-height: 2rem;
+}
+.members-wrapper button:hover {
+  background-color: #0d0;
+  color: #eee;
+}
+
+.game-wrapper {
+  width: 60rem;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  height: 30rem;
+  background-color: #eee;
+  /*.action-button {
+    width: 150px;
+    height: 40px;
+    background-color: rgba(1,1,1,0.5);
+    text-align: center;
+    line-height: 40px;
+    font-weight: normal;
+    color: #fff;
+  }*/
+}
+.game-wrapper .header {
+  width: 100%;
+  height: 5rem;
+  position: absolute;
+}
+.game-wrapper .logo {
+  left: 5%;
+  position: absolute;
+  height: 5rem;
+}
+.game-wrapper .control-box {
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+}
+.game-wrapper .control-box * {
+  display: inline;
+}
+.game-wrapper .content {
+  position: absolute;
+  width: 90%;
+  height: calc(90% - 5rem);
+  bottom: 10%;
+  left: 5%;
+  background-color: #ddd;
+}
+.game-wrapper .player-list {
+  width: 30%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  background-color: #ccc;
+}
+.game-wrapper .player-list .player-entry {
+  width: 100%;
+  height: 2.5rem;
+  left: 0;
+  margin: 0;
+  display: inline-block;
+  background-color: #ccc;
+}
+.game-wrapper .player-list .player-entry:nth-of-type(even) {
+  background-color: #ddd;
+}
+.game-wrapper .player-list .player-entry * {
+  display: inline-block;
+  /* font-size: 1rem; */
+  line-height: 2.5rem;
+  float: left;
+  text-indent: .5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.game-wrapper .player-list .player-entry .username {
+  width: 45%;
+  text-align: left;
+}
+.game-wrapper .player-list .player-entry .rank {
+  width: 40%;
+  text-align: left;
+}
+.game-wrapper .player-list .player-entry .cards {
+  width: calc(15% - 2rem);
+  padding-right: 2rem;
+  text-align: right;
+}
+.game-wrapper .buttons-wrapper {
+  left: 70%;
+  width: 20%;
+  border-top-right-radius: 1rem;
+  height: 3rem;
+  bottom: 0;
+  position: absolute;
+  background-color: #eee;
+}
+.game-wrapper .buttons-wrapper button {
+  position: absolute;
+  right: 3rem;
+  top: .75rem;
+}
+.game-wrapper .card-stack {
+  position: absolute;
+  background-color: #00f;
+  width: 60%;
+  height: 30%;
+  margin: 0;
+  top: 0;
+  left: 0;
+  padding: 0;
+  border: 0;
+}
+.game-wrapper .upper-gui {
+  position: absolute;
+  background: #00f;
+  width: 100%;
+  height: calc(100% - 180px);
+  margin: 0;
+  left: 0;
+  padding: 0;
+  border: 0;
+  right: 0;
+}
+.game-wrapper .inventory-wrapper {
+  width: 70%;
+  background-color: #eee;
+  height: 10rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top-right-radius: 1rem;
+}
+.game-wrapper .inventory {
+  width: calc(100% - 2rem);
+  left: 1rem;
+  top: 1rem;
+  bottom: 0;
+  height: calc(100% - 2rem);
+  /*top: calc(50% - 4rem);*/
+  background-color: transparent;
+  position: absolute;
+  /* overflow: visible; */
+}
+.game-wrapper button {
+  padding: 0em .8em;
+  height: 2em;
+  min-width: 5em;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25em;
+  font-family: "roboto slab";
+  color: #222;
+  line-height: 2em;
+}
+.game-wrapper button:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #000;
+}
+.game-wrapper .lower-gui > .corner {
+  left: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url(../images/triangle.png);
+  width: 180px;
+  background-repeat: no-repeat;
+  opacity: .5;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 6px;
+}
+.card, .card * {
+  border: 1px;
+  font-size: 100%;
+  padding: 0;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.card .corner {
+  height: 25%;
+  width: 16.666666666666664%;
+}
+.card #lower-corner {
+  bottom: 3px;
+  right: 3px;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.card #upper-corner {
+  left: 3px;
+  top: 3px;
+}
+.card .rank {
+  font-weight: bold;
+  height: 50%;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+.card[id^='H'] .rank, .card[id^='D'] .rank {
+  color: #f00;
+}
+.card[id^='C'] .rank, .card[id^='S'] .rank {
+  color: #000;
+}
+.card #joker-rank {
+  text-align: left;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.card #reg-rank {
+  text-align: center;
+}
+.card .corner-img {
+  height: 50%;
+  margin: 0;
+  top: calc(50% + 3px);
+  width: 100%;
+}
+.card[id$='14'] .corner-img {
+  visibility: hidden;
+}
+.card .center {
+  height: 62.5%;
+  left: 25%;
+  top: 18.75%;
+  width: 50%;
+}
+.card .center-img {
+  height: 60%;
+  top: 20%;
+  width: 100%;
+}
+.card .gloss {
+  height: 100%;
+  opacity: 50%;
+  width: 100%;
+}
+.card#selected {
+  top: -50px;
+}
+
+.message-wrapper {
+  width: 30rem;
+  height: 10rem;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #eee;
+}
+.message-wrapper .header {
+  height: 20%;
+  width: 100%;
+  left: 1rem;
+  top: 10%;
+  position: absolute;
+}
+.message-wrapper .content {
+  width: 100%;
+  height: 60%;
+  bottom: 10%;
+  background-color: #ddd;
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
+}
+.message-wrapper button {
+  width: 5rem;
+  height: 2.3rem;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25rem;
+  font-family: "roboto slab";
+  bottom: 1rem;
+  left: 50%;
+  -moz-transform: translatex(-50%);
+  -o-transform: translatex(-50%);
+  -ms-transform: translatex(-50%);
+  -webkit-transform: translatex(-50%);
+  transform: translatex(-50%);
+  position: absolute;
+  color: #222;
+}
+.message-wrapper button:hover {
+  background-color: #0d0;
+  color: #eee;
+}
+
+/*# sourceMappingURL=intro.css.map */

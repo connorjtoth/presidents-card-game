@@ -1,0 +1,52 @@
+.message-wrapper
+{
+  width: 30rem;
+  height: 10rem;
+  border-radius: 1rem;
+  left: calc(50% - 15rem);
+  top: calc(50% - 5rem);
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+  position: absolute;
+}
+
+.message-wrapper .header
+{
+  height: 20%;
+  width: 100%;
+  left: 1rem;
+  top: 10%;
+  position: absolute;
+}
+
+.message-wrapper .content
+{
+  width: 100%;
+  height: 60%;
+  bottom: 10%;
+  background-color: #ddd;
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.message-wrapper button
+{
+  width: 5rem;
+  height: 2.3rem;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25rem;
+  font-family: 'roboto slab';
+  position: absolute;
+  bottom: 1rem;
+  left: calc(50% - 2.5rem);
+  color: #222;
+}
+
+.message-wrapper button:hover
+{
+  background-color: #0d0;
+  color: #eee;
+}

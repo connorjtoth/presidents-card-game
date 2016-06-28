@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Presidents Interface -- Alpha</title>
+  <link rel="stylesheet" href="res/stylesheets/intro.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="intro-wrapper">
+
+    <img class="logo" src="res/images/logo.png">
+
+    <div class="content">
+      <div class="form"> <!-- actual <form> buttons redirect = bad -->
+        <input class="name-field" placeholder="Name..">
+        <button class="join-button">Join</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="members-wrapper" style="visibility:hidden; opacity: 0;">
+
+    <!-- members -->
+    <div class="header">
+      <img class="logo" src="res/images/logo.png">
+      <div class="control-box">
+        <button class="refresh-button">refresh</button>
+        <button class="start-button">start</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="member-entry">
+        <div class="number">Order</div>
+        <div class="name">Username</div>
+        <div class="rank">Rank</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="game-wrapper" style="visibility:hidden; opacity: 0;">
+
+    <!-- game -->
+    <div class="header">
+      <img class="logo" src="res/images/logo.png">
+      <div class="control-box">
+        <button class="stats">Stats</button>
+        <button class="opts">Options</button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="card-stack">
+        <div class="cardback"></div>
+        <script>
+        var height = $('.cardback').height();
+        $('.cardback').width(height * 6/8);
+      </script>
+      </div>
+      <div class="player-list">
+        <div class="player-entry">
+          <div class="username">Bob</div>
+          <div class="rank">President</div>
+          <div class="cards">3</div>
+        </div>
+      </div>
+      <div class="inventory-wrapper">
+        <div class="inventory"></div>  
+      </div>
+      <div class="buttons-wrapper">
+        <button class="play">Play</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    var socket = io();
+
+    var introWrapper = $('.intro-wrapper'),
+        membersWrapper = $('.members-wrapper'),
+        nameField = $('.intro-wrapper .name-field'),
+        gameWrapper = $('.game-wrapper'),
+        joinButton = $('.intro-wrapper .join-button'),
+        startButton = $('.members-wrapper #start');
+  </script>
+  <script src="client/functs.js"></script>
+  <script src="client/table.js"></script>
+  <script src="client/constants_client.js"></script>
+  <script src="client/display.js"></script>
+  <script src="client/gameclient.js"></script>
+
+
+  <script src="client/members.js"></script>
+</body>
+</html>

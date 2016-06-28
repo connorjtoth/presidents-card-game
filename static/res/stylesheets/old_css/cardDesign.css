@@ -1,0 +1,114 @@
+/* Card and card design */
+
+/* the card */
+.card,
+.card *
+{
+  border: 1px;
+  font-size: calc(100%);
+  padding: 0;
+  position: absolute;
+  user-select: none;
+}
+
+.card
+{
+  background-color: #fff;
+  border-radius: calc(2 * var(--bwidth));
+}
+
+/* corner elements */
+.card .corner
+{
+  height: 25%;
+  width: calc(100% / 6);
+}
+
+.card #lower-corner
+{
+  bottom: var(--bwidth);
+  right: var(--bwidth);
+  transform: rotate(180deg);
+}
+
+.card #upper-corner
+{
+  left: var(--bwidth);
+  top: var(--bwidth);
+}
+
+/* the corner / rank */
+.card .rank
+{
+  font-weight: bold;
+  height: 50%;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+.card[id^=H] .rank,
+.card[id^=D] .rank
+{
+  color: var(--red);
+}
+
+.card[id^=C] .rank,
+.card[id^=S] .rank
+{
+  color: var(--black);
+}
+
+.card #joker-rank
+{
+   text-align: left;
+   transform: rotate(90deg);
+}
+
+.card #reg-rank
+{
+  text-align: center;
+}
+
+/* the corner / image */
+.card .corner-img
+{
+  height: 50%;
+  margin: 0;
+  top: calc(50% + var(--bwidth));
+  width: 100%;
+}
+
+.card[id$='14'] .corner-img
+{
+  visibility: hidden;
+}
+
+/* the center */
+.card .center
+{
+  height: calc(5 * 100% / 8);
+  left: 25%;
+  top: calc(3 * 100% / 16);
+  width: 50%;
+}
+
+.card .center-img
+{
+  height: 60%;
+  top: 20%;
+  width: 100%;
+}
+
+/* the gloss */
+.card .gloss
+{
+  height: 100%;
+  opacity: 50%;
+  width: 100%;
+}
+
+.card#selected
+{
+  top: -50px;
+}

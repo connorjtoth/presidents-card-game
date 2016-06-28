@@ -1,0 +1,173 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:700);
+*
+{
+  font-family: 'roboto slab';
+}
+
+body
+{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+#members-wrapper
+{
+  width:60rem;
+  border-radius: 1rem;
+  left: calc(50% - 30rem);
+  height: 30rem;
+  top: calc(50% - 15rem);
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+}
+
+#members-wrapper #header
+{
+  height: 5rem;
+  width: 60rem;
+  position: absolute;
+}
+
+
+#members-wrapper #header img
+{
+  height: 5rem;
+
+  /* 720 * 280 */
+  left: calc(10%);/* - (720/280) * 5rem / 2);*/
+  position: absolute;
+}
+
+#members-wrapper #content
+{
+  width: 54rem;
+  left: 3rem;
+  height: calc(90% - 5em);
+  bottom: 10%;
+  background-color: #ddd;
+  position: absolute;
+  /*overflow-y: scroll;*/
+}
+
+#members-wrapper .member-entry
+{
+  height: 3rem;
+  width: 54rem;
+  background-color: #f00;
+  margin: 0;
+}
+
+#members-wrapper .member-entry *
+{
+  height: 100%;
+
+  line-height: 3rem;
+  margin: 0;
+  border: 0;
+  float: left;
+  display: inline-block;
+  text-align: center;
+}
+
+#members-wrapper .member-entry .number
+{
+  width: 6rem;
+}
+
+#members-wrapper .member-entry .name
+{
+  width: 20rem;
+}
+
+#members-wrapper .member-entry .rank
+{
+  width: 16rem;
+}
+
+#members-wrapper #control-box
+{
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+}
+
+#members-wrapper #control-box *
+{
+  display: inline;
+}
+
+#members-wrapper button
+{
+  padding: 0rem .8rem;
+  height: 2rem;
+  min-width: 5rem;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25rem;
+  font-family: 'roboto slab';
+  color: #222;
+  line-height: 2rem;
+}
+
+#members-wrapper .member-entry .actions button
+{
+  margin-left: calc(50% - 2.5rem);
+  margin-top: .35rem;
+  margin-bottom: .35rem;
+  height: 2rem;
+}
+
+#members-wrapper button:hover
+{
+  background-color: #0d0;
+  color: #eee;
+}
+
+#members-wrapper .member-entry:nth-of-type(odd)
+{
+  background-color: #ccc;
+}
+
+#members-wrapper .member-entry:nth-of-type(even)
+{
+  background-color: #ddd;
+}
+
+
+#members-wrapper .member-entry:nth-of-type(1)
+{
+  background-color: #aaa;
+}
+
+#members-wrapper #content #form
+{
+  width: 15rem;
+  left: calc(50% - 7.5rem);
+  position: absolute;
+  font-family: 'roboto slab';
+  font-weight: bold;
+  top: 25%;
+  height: 50%;
+  bottom: 25%;
+}
+
+#members-wrapper #form input
+{
+  border: 0;
+  background-color: #eee;
+  height: 2.3rem;
+  vertical-align: middle;
+  line-height: 1.5rem;
+  font-family: 'roboto slab';
+  padding-left: 1rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+
+  border-radius: .25rem;
+  width: 100%;
+}

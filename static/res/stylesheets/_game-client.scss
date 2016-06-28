@@ -1,0 +1,186 @@
+.game-wrapper {
+  width: 60rem;
+  border-radius: 1rem;
+  @include horvertcenter();
+  height: 30rem;
+  background-color: $secondary-color;
+
+  .header {
+    width: 100%;
+    height: 5rem;
+    position: absolute;
+  }
+
+  .logo {
+    left: 5%;
+    position: absolute;
+    height: 5rem;
+  }
+
+  .control-box {
+    position: absolute;
+    right: 3rem;
+    top: 2rem;
+
+    * {
+      display: inline;
+    }
+  }
+
+  .content {
+    position: absolute;
+    width: 90%;
+    height: calc(90% - 5rem);
+    bottom: 10%;
+    left: 5%;
+    background-color: $primary-color;
+  }
+
+  .player-list {
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    background-color: #ccc;
+
+    .player-entry {
+      width: 100%;
+      height: 2.5rem;
+      left: 0;
+      margin: 0;
+      display: inline-block;
+      background-color: #ccc;
+
+      &:nth-of-type(even) {
+        background-color: #ddd;
+      }
+
+      * {
+        display: inline-block;
+        /* font-size: 1rem; */
+        line-height: 2.5rem;
+        float: left;
+        text-indent: .5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .username {
+        width: 45%;
+        text-align: left;
+      }
+
+      .rank {
+        width: 40%;
+        text-align: left;
+      }
+
+      .cards {
+        width: calc(15% - 2rem);
+        padding-right: 2rem;
+        text-align: right;
+      }
+    }
+  }
+
+  .buttons-wrapper {
+    left: 70%;
+    width: 20%;
+    border-top-right-radius: 1rem;
+    height: 3rem;
+    bottom: 0;
+    position: absolute;
+    background-color: #eee;
+
+    button {
+      position: absolute;
+      right: 3rem;
+      top: .75rem;
+    }
+  }
+
+  .card-stack {
+    position: absolute;
+    background-color: #00f;
+    width: 60%;
+    height: 30%;
+    margin: 0;
+    top: 0;
+    left: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .upper-gui {
+    position: absolute;
+    background: #00f;
+    width: 100%;
+    height: calc(100% - 180px);
+    margin: 0;
+    left: 0;
+    padding: 0;
+    border: 0;
+    right: 0;
+  }
+
+  .inventory-wrapper {
+    width: 70%;
+    background-color: #eee;
+    height: 10rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top-right-radius: 1rem;
+  }
+
+  .inventory {
+    width: calc(100% - 2rem);
+    left: 1rem;
+    top: 1rem;
+    bottom: 0;
+    height: calc(100% - 2rem);
+    /*top: calc(50% - 4rem);*/
+    background-color: transparent;
+    position: absolute;
+    /* overflow: visible; */
+  }
+
+  /*.action-button {
+    width: 150px;
+    height: 40px;
+    background-color: rgba(1,1,1,0.5);
+    text-align: center;
+    line-height: 40px;
+    font-weight: normal;
+    color: #fff;
+  }*/
+
+  button {
+    padding: 0em .8em;
+    height: 2em;
+    min-width: 5em;
+    border: 0;
+    background-color: #0e0;
+    border-radius: .25em;
+    font-family: $primary-font;
+    color: #222;
+    line-height: 2em;
+
+    &:hover {
+      background-color: rgba(0,0,0, 0.25);
+      color: #000;
+    }
+  }
+
+  .lower-gui > .corner { 
+    left: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url(../images/triangle.png);
+    width: 180px;
+    background-repeat: no-repeat;
+    opacity: .5;
+  }
+
+}

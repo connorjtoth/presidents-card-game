@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Presidents Servers -- Alpha</title>
+  <link rel="stylesheet" href="servers.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<script src="/socket.io/socket.io.js"></script>
+
+<body>
+  <div id="wrapper">
+    <div id="header">
+      <img src="logo.png">
+      <div id="control-box">
+        <button id="refresh">refresh</button>
+        <button id="create">create new room</button>
+      </div>
+    </div>
+    <div id="content">
+      <div class="server-entry">
+        <div class="country">Country</div>
+        <div class="server-name">Room Name</div>
+        <div class="size">Size</div>
+        <div class="actions">Actions</div>
+      </div>
+
+      <div class="server-entry">
+        <div class="country">USA</div>
+        <div class="server-name">cooldude542's room</div>
+        <div class="size">4/4</div>
+        <div class="actions">
+          <button class="join">join</button>
+        </div>
+      </div>
+      <div class="server-entry">
+        <div class="country">USA</div>
+        <div class="server-name">cooldude542's room</div>
+        <div class="size">4/4</div>
+        <div class="actions">
+          <button class="join">join</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  var socket = io();
+  $('#joinButton').click(function()
+  {
+    socket.emit('name', $('#nameField').val());
+    $('#nameField').val('');
+    return false;
+  });
+</script>
+</body>
+</html>

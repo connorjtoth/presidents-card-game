@@ -1,0 +1,327 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
+
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:700);
+
+/*roboto slab, bold */
+
+html {
+  font-family: 'source sans pro';
+}
+
+/* todo media queries */
+
+#game-wrapper {
+  width: 60rem;
+  border-radius: 1rem;
+  left: calc(50% - 30rem);
+  height: 30rem;
+  top: calc(50% - 15rem);
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+  position: absolute;
+}
+
+#game-wrapper #header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  height: 5rem;
+  padding: 0;
+  position: absolute;
+}
+
+#game-wrapper #logo {
+  top: 0;
+  left: 5%;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: 5rem;
+}
+
+#game-wrapper #control-box {
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+}
+
+#game-wrapper #control-box * {
+  display: inline;
+}
+
+#game-wrapper #content {
+  position: absolute;
+  width: 90%;
+  height: calc(90% - 5rem);
+  bottom: 10%;
+  margin: 0;
+  padding: 0;
+  left: 5%;
+  background-color: #ddd;
+}
+
+#game-wrapper #player-list {
+  width: 30%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #ccc;
+}
+
+#game-wrapper #buttons-wrapper {
+  left: 70%;
+  width: 20%;
+  border-top-right-radius: 1rem;
+  height: 3rem;
+  bottom: 0;
+  position: absolute;
+  background-color: #eee;
+}
+
+#game-wrapper #buttons-wrapper button {
+  position: absolute;
+  right: 3rem;
+  top: .75rem;
+}
+
+#game-wrapper #player-list .player-entry {
+  width: 100%;
+  height: 2.5rem;
+  left: 0;
+  margin: 0;
+  display: inline-block;
+  background-color: #ccc;
+}
+
+#game-wrapper #player-list .player-entry:nth-of-type(even) {
+  background-color: #ddd;
+}
+
+#game-wrapper #player-list .player-entry * {
+  display: inline-block;
+  /* font-size: 1rem; */
+  line-height: 2.5rem;
+  float: left;
+  text-indent: .5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#game-wrapper #player-list .player-entry .username {
+  width: 45%;
+  text-align: left;
+}
+
+#game-wrapper #player-list .player-entry .rank {
+  width: 40%;
+  text-align: left;
+}
+
+#game-wrapper #player-list .player-entry .cards {
+  width: calc(15% - 2rem);
+  padding-right: 2rem;
+  text-align: right;
+}
+
+#game-wrapper #card-stack {
+  position: absolute;
+  #background: #00f;
+  width: 60%;
+  height: 30%;
+  margin: 0;
+  left: 0;
+  padding: 0;
+  border: 0;
+}
+
+#game-wrapper #upper-gui {
+  position: absolute;
+  background: #00f;
+  width: 100%;
+  height: calc(100% - 180px);
+  margin: 0;
+  left: 0;
+  padding: 0;
+  border: 0;
+  right: 0;
+}
+
+#game-wrapper #inventory-wrapper {
+  width: 70%;
+  background-color: #eee;
+  height: 10rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top-right-radius: 1rem;
+}
+
+/* inventory */
+
+#game-wrapper #inventory {
+  width: calc(100% - 2rem);
+  left: 1rem;
+  top: 1rem;
+  bottom: 0;
+  height: calc(100% - 2rem);
+  /*top: calc(50% - 4rem);*/
+  background-color: transparent;
+  position: absolute;
+  /* overflow: visible; */
+}
+
+/*#game-wrapper .action-button
+{
+  width: 150px;
+  height: 40px;
+  background-color: rgba(1,1,1,0.5);
+  text-align: center;
+  line-height: 40px;
+  font-weight: normal;
+  color: #fff;
+}*/
+
+#game-wrapper button {
+  padding: 0em .8em;
+  height: 2em;
+  min-width: 5em;
+  border: 0;
+  background-color: #0e0;
+  border-radius: .25em;
+  font-family: 'roboto slab';
+  color: #222;
+  line-height: 2em;
+}
+
+#game-wrapper button:hover {
+  background-color: rgba(0,0,0, 0.25);
+  color: #000;
+}
+
+/*
+#game-wrapper #lower-gui > #corner
+{ 
+  left: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url(../images/triangle.png);
+  width: 180px;
+  background-repeat: no-repeat;
+  opacity: .5;
+
+}
+*/
+
+/* Card and card design */
+
+/* the card */
+
+.card,
+.card * {
+  border: 1px;
+  font-size: 100%;
+  padding: 0;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+/* corner elements */
+
+.card .corner {
+  height: 25%;
+  width: 16.666666666666664%;
+}
+
+.card #lower-corner {
+  bottom: 3px;
+  right: 3px;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.card #upper-corner {
+  left: 3px;
+  top: 3px;
+}
+
+/* the corner / rank */
+
+.card .rank {
+  font-weight: bold;
+  height: 50%;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+.card[id^=H] .rank,
+.card[id^=D] .rank {
+  color: #f00;
+}
+
+.card[id^=C] .rank,
+.card[id^=S] .rank {
+  color: #000;
+}
+
+.card #joker-rank {
+  text-align: left;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.card #reg-rank {
+  text-align: center;
+}
+
+/* the corner / image */
+
+.card .corner-img {
+  height: 50%;
+  margin: 0;
+  top: calc(50% + 3px);
+  width: 100%;
+}
+
+.card[id$='14'] .corner-img {
+  visibility: hidden;
+}
+
+/* the center */
+
+.card .center {
+  height: 62.5%;
+  left: 25%;
+  top: 18.75%;
+  width: 50%;
+}
+
+.card .center-img {
+  height: 60%;
+  top: 20%;
+  width: 100%;
+}
+
+/* the gloss */
+
+.card .gloss {
+  height: 100%;
+  opacity: 50%;
+  width: 100%;
+}
+
+.card#selected {
+  top: -50px;
+}
