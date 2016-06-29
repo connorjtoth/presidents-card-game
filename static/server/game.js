@@ -24,6 +24,7 @@ var Game = function ( players ) {
   this.currentPlayer = null;
   this.playerNum = 0;
   this.moveTimer = null;
+  this.round = {quantity: 0};
 
   /* Initialization and setup */
   console.log('setting up the game');
@@ -157,7 +158,7 @@ Game.prototype.skipPlayers = function ( n ) {
 }
 
 /* PLAYER MOVES */
-Game.prototype.getMove = function (callback) {
+Game.prototype.getMove = function ( callback ) {
   var game = this;
   var player = game.currentPlayer;
 
@@ -166,16 +167,36 @@ Game.prototype.getMove = function (callback) {
 
   console.log('waiting on ' + player.name);
   player.socket.emit('allow-select-cards');
-  player.socket.addListener('card-choices', game.onCardsSubmitted);
+  player.socket.addListener('card-choices', function onCardSubmitted( cardsArr ) {
+      console.log('on cards submitted');
+      var player = game.currentPlayer;
+      console.log('cards chosen: ', cardsArr);
+
+      try {
+        game.validateMove(cardsArr);
+        console.log('cards are valid');
+        player.hand.removeSet(cardsArr);
+        player.updateClientHand();
+
+        var playDetails = new PlayStruct(player, cardsArr);
+        game.discardPile.addPlay(playDetails);
+        game.endMove(callback);
+      }
+      catch (err) {
+        console.log('cards are not valid');
+        player.socket.emit('message', "Error" + err);
+        console.log(err);
+      }
+    });
 
   game.moveTimer = setTimeout(function() {
     console.log(player.name + '\'s move timed out');
-    game.endMove();
+    game.endMove(callback);
   }, 60 * 1000);
 }
 
 
-Game.prototype.endMove = function (callback) {
+Game.prototype.endMove = function ( callback ) {
   console.log(' end the current move ');
   var game = this;
   var player = game.currentPlayer;
@@ -191,6 +212,26 @@ Game.prototype.endMove = function (callback) {
 
 
 
+Game.prototype.afterMove = function ( callback ) {
+  var game = this;
+  if ( game.discard.size() > 0 ) {
+    var roundWinner = game.lastActivePlayer;
+    game.setPlayer(roundWinner);
+
+    // if out of cards, next player is going to be first player
+    if ( !roundWinner.hand.arr().length === 0 ) {
+      game.nextPlayer();
+    }
+
+    //determine to end the game
+    if ( roundWinner.hand.arr().length === 0 ) {
+      //END ROUND
+    }
+  }
+
+}
+
+
 Game.prototype.validateMove = function ( moveCards ) {
   var game = this;
   var round = game.round;
@@ -204,7 +245,7 @@ Game.prototype.validateMove = function ( moveCards ) {
 
   //ensure player has control of these cards
   for (var card of moveCards) {
-    if ( !player.hand.contains(card)) {
+    if ( !player.hand.contains(card) ) {
       throw new Error( player.name + ' doesn\'t control ' + card );
     }
   }
@@ -221,13 +262,13 @@ Game.prototype.validateMove = function ( moveCards ) {
   if (game.discardPile.length == 0) {
     var foundStartCard = false;
     for (var card of moveCards) {
-      if (card.rank === 3 && card.suit === 'C') {
+      if (card.rank === STARTING_CARD.rank && card.suit === STARTING_CARD.suit) {
         foundStartCard = true;
         break;
       }
     }
     if (!foundStartCard) {
-      throw new Error(player.name + ' must play 3 of Clubs for first move');
+      throw new Error(player.name + ' must play ' + STARTING_CARD + ' for first move');
     }
   }
 
@@ -280,21 +321,9 @@ Game.prototype.startRound = function ( ) {
 
 
   // MID ROUD
-  game.getMove( function afterMove (callback, err) {
-    if (discard.size() > 1) {
-      var roundWinner = game.lastActivePlayer;
-      game.setPlayer(roundWinner);
-    
-      if ( !roundWinner.hand.arr().length === 0 ) {
-        game.nextPlayer();
-      }
-
-      //determine to end the game
-      if ( roundWinner.hand.arr().length === 0 ) {
-        //END ROUND
-      }
-    }
-  });
+  game.getMove();
 }
+
+
 
 module.exports = Game;
