@@ -1,7 +1,6 @@
 /* Decks.js */
 var Constants = require('./constants_server.js');
 var Card = require('./card.js');
-var Table = require('./stack.js');
 module.exports = function (numJokers) {
   var deck = new Array();
   
@@ -30,7 +29,7 @@ module.exports = function (numJokers) {
     var count = 0;
 
     for (var i = 0; i < numHands; i++) {
-      hands[i] = new Table();
+      hands[i] = new Array();
     }
 
     for (var i = 0; i < deck.length; i++) {
@@ -44,7 +43,7 @@ module.exports = function (numJokers) {
 
   this.dealTo = function( playersArr ) {
     var num  = playersArr.length;
-    console.log('num: ' + num);
+    console.log('Dealing to ' + num + ' players');
     var hands = deal(num);
     for (var i = 0; i < num; i++) {
       playersArr[i].hand = hands[i];

@@ -68,7 +68,7 @@ Game.prototype.orderPlayers = function ( players ) {
   //get the latter half of players
   for (var i = 0; i < players.length; i++) {
     var player = players[i];
-    var starts = player.hand.contains(STARTING_CARD);
+    var starts = player.hand.find(function (value) { isEqual(STARTING_CARD, value); });
     
     if (first < 0 && starts)
       first = i;
@@ -97,7 +97,7 @@ Game.prototype.getLeaderboard = function ( ) {
       inGame: (game.players.inGame.indexOf(player) >= 0),
       username: player.name,
       rank: player.rank,
-      cards: player.hand.arr().length
+      cards: player.hand.length
     };
 
     leaderstats.push(leaderstat);
@@ -158,26 +158,34 @@ Game.prototype.skipPlayers = function ( n ) {
 }
 
 Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
-      console.log('on cards submitted');
-      var player = game.currentPlayer;
-      console.log('cards chosen: ', cardsArr);
+  console.log('on cards submitted');
+  var player = game.currentPlayer;
+  console.log('cards chosen: ', cardsArr);
 
-      try {
-        game.validateMove(cardsArr);
-        console.log('cards are valid');
-        player.hand.removeSet(cardsArr);
-        player.updateClientHand();
+  try {
+    game.validateMove(cardsArr);
+    console.log('cards are valid');
 
-        var playDetails = new PlayStruct(player, cardsArr);
-        game.discardPile.addPlay(playDetails);
-        game.endMove(callback);
+    //remove cards in cardsArr
+    player.hand = player.hand.filter(function (val) {
+      for ( var i = 0; i < cardsArr.length; i++ ) {
+        if ( isEqual(val, cardsArr[i]))
+          return false;
       }
-      catch (err) {
-        console.log('cards are not valid');
-        player.socket.emit('message', "Error" + err);
-        console.log(err);
-      }
+      return true;
     });
+    player.updateClientHand();
+
+    var playDetails = new PlayStruct(player, cardsArr);
+    game.discardPile.addPlay(playDetails);
+    game.endMove(callback);
+  }
+  catch (err) {
+    console.log('cards are not valid');
+    player.socket.emit('message', "Error" + err);
+    console.log(err);
+  }
+};
 
 /* PLAYER MOVES */
 Game.prototype.getMove = function ( callback ) {
@@ -191,7 +199,7 @@ Game.prototype.getMove = function ( callback ) {
   player.socket.emit('allow-select-cards');
   player.socket.addListener('card-choices', function (cardsArr) {
     game.onCardsSubmitted(cardsArr, callback);
-  }
+  });
 
   game.moveTimer = setTimeout(function() {
     console.log(player.name + '\'s move timed out');
@@ -223,12 +231,12 @@ Game.prototype.afterMove = function ( callback ) {
     game.setPlayer(roundWinner);
 
     // if out of cards, next player is going to be first player
-    if ( !roundWinner.hand.arr().length === 0 ) {
+    if ( !roundWinner.hand.length === 0 ) {
       game.nextPlayer();
     }
 
     //determine to end the game
-    if ( roundWinner.hand.arr().length === 0 ) {
+    if ( roundWinner.hand.length === 0 ) {
       //END ROUND
     }
   }
@@ -249,7 +257,7 @@ Game.prototype.validateMove = function ( moveCards ) {
 
   //ensure player has control of these cards
   for (var card of moveCards) {
-    if ( !player.hand.contains(card) ) {
+    if ( !player.hand.find( function (val) { isEqual(val,card); } ) ) {
       throw new Error( player.name + ' doesn\'t control ' + card );
     }
   }
@@ -288,31 +296,6 @@ Game.prototype.validateMove = function ( moveCards ) {
   return true;
 }
 
-
-
-
-Game.prototype.onCardsSubmitted = function( cardsArr ) {
-  game = this;
-  console.log('on cards submitted');
-  var player = game.currentPlayer;
-  console.log('cards chosen: ', cardsArr);
-
-  try {
-    game.validateMove(cardsArr);
-    console.log('cards are valid');
-    player.hand.removeSet(cardsArr);
-    player.updateClientHand();
-
-    var playDetails = new PlayStruct(player, cardsArr);
-    game.discardPile.addPlay(playDetails);
-    game.endMove();
-  }
-  catch (err) {
-    console.log('cards are not valid');
-    player.socket.emit('message', "Error" + err);
-    console.log(err);
-  }
-};
 
 
 /* ROUND STUFF */
