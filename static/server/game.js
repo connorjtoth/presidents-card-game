@@ -157,17 +157,7 @@ Game.prototype.skipPlayers = function ( n ) {
   }
 }
 
-/* PLAYER MOVES */
-Game.prototype.getMove = function ( callback ) {
-  var game = this;
-  var player = game.currentPlayer;
-
-  console.log('get move');
-  player.socket.emit('message', 'it is your turn');
-
-  console.log('waiting on ' + player.name);
-  player.socket.emit('allow-select-cards');
-  player.socket.addListener('card-choices', function onCardSubmitted( cardsArr ) {
+Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
       console.log('on cards submitted');
       var player = game.currentPlayer;
       console.log('cards chosen: ', cardsArr);
@@ -188,6 +178,20 @@ Game.prototype.getMove = function ( callback ) {
         console.log(err);
       }
     });
+
+/* PLAYER MOVES */
+Game.prototype.getMove = function ( callback ) {
+  var game = this;
+  var player = game.currentPlayer;
+
+  console.log('get move');
+  player.socket.emit('message', 'it is your turn');
+
+  console.log('waiting on ' + player.name);
+  player.socket.emit('allow-select-cards');
+  player.socket.addListener('card-choices', function (cardsArr) {
+    game.onCardsSubmitted(cardsArr, callback);
+  }
 
   game.moveTimer = setTimeout(function() {
     console.log(player.name + '\'s move timed out');

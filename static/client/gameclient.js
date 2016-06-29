@@ -38,8 +38,7 @@ gameClient.printLeaderboard = function ( leaderstats )
   }
 };
 
-gameClient.printMessage = function ( text )
-{
+gameClient.printMessage = function ( text ) {
   console.log('message from server: ', text);
   var closeBtn = $('<button>')
   .text('close');
@@ -58,8 +57,7 @@ gameClient.printMessage = function ( text )
   .append(headerDiv)
   .append(contentDiv);
 
-  closeBtn.click(function ( )
-  {
+  closeBtn.click(function ( ) {
     msgDiv.remove();
   });
 
@@ -67,65 +65,55 @@ gameClient.printMessage = function ( text )
 };
 
 // hand functions
-var stack = new Table();
+var stack = new Set();
 var inv = $('.inventory');
 
 
-var pushToStack = function ( card, guiMap )
-{
+var pushToStack = function ( card, guiMap ) {
   var garbage = new Array();
 
   //check if card matches rank other cards
-  for (var stackedCard of stack.arr())
-  {
-    if (stackedCard.rank !== card.rank)
-    {
+  for (var stackedCard of stack) {
+    if (stackedCard.rank !== card.rank) {
       garbage.push(stackedCard);
     }
   }
 
   for (var entry of garbage) {
     //actual removal from stack
-    stack.remove(entry);
+    stack.delete(entry);
 
     //do some animations
     var entryGui = guiMap.get(entry);
-    if (entryGui.hasClass('card-selected'))
-    {
+    if (entryGui.hasClass('card-selected')) {
       cardAnims.click({delegateTarget: entryGui}, entryGui);
       entryGui.trigger('mouseleave');
     }
   }
 
   //add the card to the stack
-  stack.push( card );
+  stack.add(card);
 };
 
-gameClient.updateHand = function ( hand )
-{
+gameClient.updateHand = function ( hand ) {
   console.log('updating hand');
   var guiMap = new Map();
   var cardGuis = new Array();
 
   inv.empty();
   //get gui and push to cardGuis
-  for (var card of hand)
-  {
+  for (var card of hand) {
     var gui = DesignModule.printCard(card);
     guiMap.set(card, gui);
-    var onclick = (function (card)
-    {
-      return function(evt)
-      {
+    var onclick = (function (card) {
+      return function(evt) {
         cardAnims.click(evt, card);
         var selected = $(evt.delegateTarget).hasClass('card-selected');
-        if (selected)
-        {
+        if ( selected ) {
           pushToStack( card, guiMap );
         }
-        else
-        {
-          stack.remove(card);
+        else {
+          stack.delete(card);
         }
       }
     })(card);
@@ -136,25 +124,21 @@ gameClient.updateHand = function ( hand )
   layout.positionCards(cardGuis);
 };
 
-gameClient.onPlayClicked = function()
-{
+gameClient.onPlayClicked = function() {
   console.log('play clicked');
-  socket.emit('card-choices', stack.arr());
-  for (var stackedCard of stack.arr())
-  {
+  socket.emit('card-choices', stack);
+  for ( var stackedCard of stack ) {
     var stackedCardGui = guiMap.get(stackedCard);
     //cardAnims.click(stackedCardGui
   }
-  stack = new Table();
+  stack = new Set();
 };
 
-gameClient.onGetCardSelections = function ( )
-{
+gameClient.onGetCardSelections = function ( ) {
   $('.play').click(debounce(gameClient.onPlayClicked, 1000 ));
 };
 
-gameClient.onDisableCardSelections = function ( )
-{
+gameClient.onDisableCardSelections = function ( ) {
   $('.play').off('click');
 };
 
