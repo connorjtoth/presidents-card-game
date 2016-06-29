@@ -15,7 +15,7 @@ module.exports = function (numJokers) {
   }
 
   this.shuffle = function(times) {
-    for (var time = 0; time < (times || 1); time++) {
+    for (var time = 0; time < (times || 7); time++) {
       for (var i = 0; i < deck.length; i++) {
         var j = Math.floor(Math.random() * deck.length);
         var temp = deck[j];
