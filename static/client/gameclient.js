@@ -70,11 +70,6 @@ var inv = $('.inventory');
 var guiMap = new Map();
 
 var pushToStack = function ( card, guiMap ) {
-  console.log('pushing to stack');
-  console.log('card: ', card);
-  console.log('***');
-  console.log('guimap: ', guiMap);
-  console.log('****');
   //check if card matches rank other cards
   for (var stackedCard of stack) {
     if (stackedCard.rank !== card.rank) {
@@ -93,11 +88,7 @@ var pushToStack = function ( card, guiMap ) {
     }
   }
   //add the card to the stack
-  console.log('stackb:',stack);
-
   stack.push(card);
-
-  console.log('stacka',stack);
 };
 
 gameClient.updateHand = function ( hand ) {

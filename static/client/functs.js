@@ -49,40 +49,28 @@ var debounce = function ( funct, wait, immediate ) {
   };
 };
 
+function isEquivalent(a, b) {
+    // Create arrays of property names
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
 
-var isEqual = function ( ) {
-  /* checks arbitrary number of element equality */
-  var args = arguments;
-
-  // obviously equal if less than 2 objects
-  if ( args.length < 2 ) {
-    return true;
-  }
-
-  // create arrays of property names
-  var props = new Array(args.length);
-  for ( var i = 0; i < args.length; i++ ) {
-    props[i] = Object.getOwnPropertyNames(args[i]);
-  }
-
-  // not equal if not same number of properties
-  var propCount = props[0].length;
-  for ( var i = 1; i < args.length; i++ ) {
-    if ( props[i].length != propCount ) {
-      return false;
-    }
-  }
-
-  // finally determine if the values of same property are equal
-  for ( var i = 0; i < props[0].length; i++ ) {
-    var propName = props[0][i];
-
-    for ( var j = 0; j < props.length; j++ ) {
-      if ( props[0][propName] !== props[j][propName]) {
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length != bProps.length) {
         return false;
-      }
     }
-  }
 
-  return true;
-};
+    for (var i = 0; i < aProps.length; i++) {
+        var propName = aProps[i];
+
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+}

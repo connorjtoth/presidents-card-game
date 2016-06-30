@@ -2,39 +2,31 @@ var DiscardPile = require('./discardpile.js')
 var Card = require('./card.js');
 var Deck = require('./deck.js');
 
-var isEqual = function ( ) {
-  var args = arguments;
+function isEqual(a, b) {
+    // Create arrays of property names
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
 
-  // comparison requires at least two comparands
-  if ( args.length < 2 )
-    return true;
-
-  // create arrays of property names
-  var props = new Array(args.length);
-  for ( var i = 0; i < args.length; i++ ) {
-    props[i] = Object.getOwnPropertyNames(args[i]);
-  }
-
-  // not equal if not same number of properties
-  var propCount = props[0].length;
-  for ( var i = 1; i < args.length; i++ ) {
-    if ( props[i].length != propCount ) {
-      return false;
-    }
-  }
-
-  // finally determine if the values of same property are equal
-  for ( var i = 0; i < props[0].length; i++ ) {
-    var propName = props[0][i];
-
-    for ( var j = 0; j < props.length; j++ ) {
-      if ( props[0][propName] !== props[j][propName] )
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length != bProps.length) {
         return false;
     }
-  }
 
-  return true;
-};
+    for (var i = 0; i < aProps.length; i++) {
+        var propName = aProps[i];
+
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+}
 
 var NUM_OF_JOKERS = 2;
 var TIMES_TO_SHUFFLE = 7;
@@ -69,7 +61,7 @@ var Game = function ( players ) {
   deck.dealTo(game.players.inGame);
 
   //order players
-  game.orderPlayers(game.players.inGame);
+  game.players.inGame = game.orderPlayers(game.players.inGame);
   game.players.order = game.players.inGame;
 
   //update hands and select starting player
@@ -102,8 +94,18 @@ Game.prototype.orderPlayers = function ( players ) {
   //get the latter half of players
   for (var i = 0; i < players.length; i++) {
     var player = players[i];
-    var starts = player.hand.find(function (value) { return isEqual(STARTING_CARD, value); });
-    
+    var starts = false;
+
+    for (var card of player.hand) {
+      console.log(card, ' vs ', STARTING_CARD);
+      if (isEqual(STARTING_CARD, card)) {
+        starts = true;
+        console.log('true');
+        break;
+      }
+      console.log('false');
+    }
+
     if (first < 0 && starts) {
       first = i;
       console.log(player.name + ' has the ' + STARTING_CARD);
@@ -115,11 +117,11 @@ Game.prototype.orderPlayers = function ( players ) {
 
   //get the former half of players
   for (var i = 0; i < first; i++) {
-    var player = players[i];
     temp.push(players[i]);
   }
 
   players = temp;
+  return temp;
 };
 
 /* LEADERBOARD */
@@ -343,7 +345,7 @@ Game.prototype.validateMove = function ( moveCards ) {
   }
 
   //first card of the game must be 3 of clubs
-  if (game.discardPile.length == 0) {
+  if (game.discard.playCount() == 0) {
     var foundStartCard = false;
     for (var card of moveCards) {
       if (card.rank === STARTING_CARD.rank && card.suit === STARTING_CARD.suit) {
