@@ -2,16 +2,12 @@ var DiscardPile = require('./discardpile.js')
 var Card = require('./card.js');
 var Deck = require('./deck.js');
 
-
-
 var isEqual = function ( ) {
-  /* checks arbitrary number of element equality */
   var args = arguments;
 
-  // obviously equal if less than 2 objects
-  if ( args.length < 2 ) {
+  // comparison requires at least two comparands
+  if ( args.length < 2 )
     return true;
-  }
 
   // create arrays of property names
   var props = new Array(args.length);
@@ -32,9 +28,8 @@ var isEqual = function ( ) {
     var propName = props[0][i];
 
     for ( var j = 0; j < props.length; j++ ) {
-      if ( props[0][propName] !== props[j][propName]) {
+      if ( props[0][propName] !== props[j][propName] )
         return false;
-      }
     }
   }
 
@@ -63,7 +58,7 @@ var Game = function ( players ) {
   this.currentPlayer = null;
   this.playerNum = 0;
   this.moveTimer = null;
-  this.round = {quantity: 0};
+  this.round = {quantity: 0, first: true};
 
   /* Initialization and setup */
   console.log('setting up the game');
@@ -203,17 +198,14 @@ Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
   console.log('on cards submitted');
   var player = game.currentPlayer;
   console.log('cards chosen: ', cardsArr);
-  console.log('cards chosen:');
-  for (var aaaitem of cardsArr) console.log(aaaitem);
 
   try {
     game.validateMove(cardsArr);
-    console.log('cards are valid');
 
     //remove cards in cardsArr
     player.hand = player.hand.filter(function (val) {
       for ( var i = 0; i < cardsArr.length; i++ ) {
-        if ( isEqual(val, cardsArr[i]))
+        if ( isEqual(val, cardsArr[i]) )
           return false;
       }
       return true;
@@ -262,31 +254,66 @@ Game.prototype.endMove = function ( callback ) {
 
   player.socket.removeAllListeners('card-choices');
   player.socket.emit('disallow-select-cards');
+}
 
-  //notify clients of changes
-  game.updateLeaderboards();
+Game.prototype.shouldEndRound = function ( ) {
+  // end if player just played last card(s)
+  if ( game.lastActivePlayer.hand.length === 0 ) {
+    return true;
+  }
+
+  // if last active player is the current player
+  if ( game.lastActivePlayer === game.currentPlayer ) {
+    return true;
+  }
+
+  // four of the same rank played in a row
+  if (game.discard.lastFourSame()) {
+    return true;
+  }
+
+  // a joker was played
+  if (game.discard.getRank(0) === 14) {
+    return true;
+  }
+
+  return false;
 }
 
 
 
 Game.prototype.afterMove = function ( callback ) {
   var game = this;
-  if ( game.discard.size() > 0 ) {
-    var roundWinner = game.lastActivePlayer;
-    game.setPlayer(roundWinner);
 
-    // if out of cards, next player is going to be first player
-    if ( !roundWinner.hand.length === 0 ) {
-      game.nextPlayer();
-    }
 
-    //determine to end the game
-    if ( roundWinner.hand.length === 0 ) {
-      //END ROUND
-    }
+
+  // no longer first move of the round
+  if (game.round.first)
+    game.round.first = false;
+
+  if ( !game.shouldEndRound() ) {
+    game.nextPlayer();
+
+    //notify clients of changes
+    game.updateLeaderboards();
+
+    game.getMove();
+  }
+  else {
+    game.afterRound();
   }
 
 }
+
+Game.prototype.afterRound = function ( ) {
+  game.setPlayer(game.lastActivePlayer);
+  
+  // if out of cards, next player is going to be first player
+  if (game.lastActivePlayer.hand.length === 0) {
+    game.nextPlayer();
+  }
+}
+
 
 
 Game.prototype.validateMove = function ( moveCards ) {
@@ -295,7 +322,7 @@ Game.prototype.validateMove = function ( moveCards ) {
   var player = game.currentPlayer;
   
   //ensure a correct number of cards are being played
-  if (moveCards.length != game.round.quantity) {
+  if (!game.round.first && moveCards.length != game.round.quantity) {
     throw new Error( player.name + ' played ' + 
       moveCards.length + ' cards instead of ' + round.quantity);
   }
@@ -348,9 +375,7 @@ Game.prototype.validateMove = function ( moveCards ) {
 
 Game.prototype.startRound = function ( ) {
   var game = this;
-
-  var quantity = 0;
-
+  game.round = {quantity: 0, first: true};
 
   // MID ROUD
   game.getMove();
