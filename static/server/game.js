@@ -2,6 +2,45 @@ var DiscardPile = require('./discardpile.js')
 var Card = require('./card.js');
 var Deck = require('./deck.js');
 
+
+
+var isEqual = function ( ) {
+  /* checks arbitrary number of element equality */
+  var args = arguments;
+
+  // obviously equal if less than 2 objects
+  if ( args.length < 2 ) {
+    return true;
+  }
+
+  // create arrays of property names
+  var props = new Array(args.length);
+  for ( var i = 0; i < args.length; i++ ) {
+    props[i] = Object.getOwnPropertyNames(args[i]);
+  }
+
+  // not equal if not same number of properties
+  var propCount = props[0].length;
+  for ( var i = 1; i < args.length; i++ ) {
+    if ( props[i].length != propCount ) {
+      return false;
+    }
+  }
+
+  // finally determine if the values of same property are equal
+  for ( var i = 0; i < props[0].length; i++ ) {
+    var propName = props[0][i];
+
+    for ( var j = 0; j < props.length; j++ ) {
+      if ( props[0][propName] !== props[j][propName]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
 var NUM_OF_JOKERS = 2;
 var TIMES_TO_SHUFFLE = 7;
 var STARTING_CARD = new Card('C', 3);
@@ -68,10 +107,12 @@ Game.prototype.orderPlayers = function ( players ) {
   //get the latter half of players
   for (var i = 0; i < players.length; i++) {
     var player = players[i];
-    var starts = player.hand.find(function (value) { isEqual(STARTING_CARD, value); });
+    var starts = player.hand.find(function (value) { return isEqual(STARTING_CARD, value); });
     
-    if (first < 0 && starts)
+    if (first < 0 && starts) {
       first = i;
+      console.log(player.name + ' has the ' + STARTING_CARD);
+    }
 
     if (first >= 0)
       temp.push(player);
@@ -158,9 +199,12 @@ Game.prototype.skipPlayers = function ( n ) {
 }
 
 Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
+  var game = this;
   console.log('on cards submitted');
   var player = game.currentPlayer;
   console.log('cards chosen: ', cardsArr);
+  console.log('cards chosen:');
+  for (var aaaitem of cardsArr) console.log(aaaitem);
 
   try {
     game.validateMove(cardsArr);
@@ -198,6 +242,7 @@ Game.prototype.getMove = function ( callback ) {
   console.log('waiting on ' + player.name);
   player.socket.emit('allow-select-cards');
   player.socket.addListener('card-choices', function (cardsArr) {
+    console.log('got card-choices: ', cardsArr);
     game.onCardsSubmitted(cardsArr, callback);
   });
 
@@ -215,7 +260,7 @@ Game.prototype.endMove = function ( callback ) {
 
   clearTimeout(game.moveTimer);
 
-  player.socket.removeListener('card-choices');
+  player.socket.removeAllListeners('card-choices');
   player.socket.emit('disallow-select-cards');
 
   //notify clients of changes
@@ -257,7 +302,7 @@ Game.prototype.validateMove = function ( moveCards ) {
 
   //ensure player has control of these cards
   for (var card of moveCards) {
-    if ( !player.hand.find( function (val) { isEqual(val,card); } ) ) {
+    if ( !player.hand.find( function (val) { return isEqual(val,card); } ) ) {
       throw new Error( player.name + ' doesn\'t control ' + card );
     }
   }

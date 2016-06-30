@@ -22,7 +22,7 @@ var Player = function ( socket ) {
   };
 
   this.updateClientHand = function () {
-    var handArr = context.hand.arr();
+    var handArr = context.hand;
     handArr.sort(Cards.sortFunction);
     context.socket.emit('update-hand', handArr);
     console.log('updated ' + context.name + '\'s hand');

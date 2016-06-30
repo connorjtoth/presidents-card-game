@@ -18,4 +18,8 @@ var Card = function ( suit, rank ) {
   this.id = suit + '_' + rank;
 }
 
+Card.prototype.toString = function ( ) {
+  return this.rankText + ' of ' + this.suit;
+}
+
 module.exports = Card;

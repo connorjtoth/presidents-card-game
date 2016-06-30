@@ -65,39 +65,44 @@ gameClient.printMessage = function ( text ) {
 };
 
 // hand functions
-var stack = new Set();
+var stack = new Array();
 var inv = $('.inventory');
-
+var guiMap = new Map();
 
 var pushToStack = function ( card, guiMap ) {
-  var garbage = new Array();
-
+  console.log('pushing to stack');
+  console.log('card: ', card);
+  console.log('***');
+  console.log('guimap: ', guiMap);
+  console.log('****');
   //check if card matches rank other cards
   for (var stackedCard of stack) {
     if (stackedCard.rank !== card.rank) {
-      garbage.push(stackedCard);
+      // remove this card from the stack
+      //do some animations
+      var entryGui = guiMap.get(stackedCard);
+
+      //actual removal from stack
+      stack.splice(stack.indexOf(stackedCard));
+
+      // back to animation
+      if (entryGui.hasClass('card-selected')) {
+        cardAnims.click({delegateTarget: entryGui}, entryGui);
+        entryGui.trigger('mouseleave');
+      }
     }
   }
-
-  for (var entry of garbage) {
-    //actual removal from stack
-    stack.delete(entry);
-
-    //do some animations
-    var entryGui = guiMap.get(entry);
-    if (entryGui.hasClass('card-selected')) {
-      cardAnims.click({delegateTarget: entryGui}, entryGui);
-      entryGui.trigger('mouseleave');
-    }
-  }
-
   //add the card to the stack
-  stack.add(card);
+  console.log('stackb:',stack);
+
+  stack.push(card);
+
+  console.log('stacka',stack);
 };
 
 gameClient.updateHand = function ( hand ) {
   console.log('updating hand');
-  var guiMap = new Map();
+  guiMap = new Map();
   var cardGuis = new Array();
 
   inv.empty();
@@ -109,12 +114,10 @@ gameClient.updateHand = function ( hand ) {
       return function(evt) {
         cardAnims.click(evt, card);
         var selected = $(evt.delegateTarget).hasClass('card-selected');
-        if ( selected ) {
+        if ( selected )
           pushToStack( card, guiMap );
-        }
-        else {
-          stack.delete(card);
-        }
+        else
+          stack.splice(stack.indexOf(card));
       }
     })(card);
     $(gui).click(onclick);
@@ -129,9 +132,10 @@ gameClient.onPlayClicked = function() {
   socket.emit('card-choices', stack);
   for ( var stackedCard of stack ) {
     var stackedCardGui = guiMap.get(stackedCard);
-    //cardAnims.click(stackedCardGui
+    cardAnims.click(stackedCardGui);
   }
-  stack = new Set();
+
+  stack = new Array();
 };
 
 gameClient.onGetCardSelections = function ( ) {
