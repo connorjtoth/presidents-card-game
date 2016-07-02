@@ -172,7 +172,6 @@ Game.prototype.nextPlayer = function() {
 
   var game = this;
   var lastPlayer = game.currentPlayer;
-  var plays = game.plays;
 
   game.playerNum = (++game.playerNum) % game.players.inGame.length;
   game.currentPlayer = game.players.inGame[game.playerNum];
@@ -209,7 +208,7 @@ Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
       }
       return true;
     });
-
+    game.round.quantity = cardsArr.length;
     player.updateClientHand();
     game.discard.addPlay(player, cardsArr);
   }
@@ -337,6 +336,10 @@ Game.prototype.validateMove = function ( moveCards ) {
   var game = this;
   var round = game.round;
   var player = game.currentPlayer;
+
+  if (moveCards.length === 0) {
+    throw new Error('no cards played');
+  }
   
   //ensure a correct number of cards are being played
   if (!game.round.first && moveCards.length != game.round.quantity) {

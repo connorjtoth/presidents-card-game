@@ -57,9 +57,7 @@ gameClient.printMessage = function ( text ) {
   .append(headerDiv)
   .append(contentDiv);
 
-  closeBtn.click(function ( ) {
-    msgDiv.remove();
-  });
+  closeBtn.click(function ( ) { msgDiv.remove(); });
 
   $('body').append(msgDiv);
 };
@@ -123,7 +121,11 @@ gameClient.onPlayClicked = function() {
   socket.emit('card-choices', stack);
   for ( var stackedCard of stack ) {
     var stackedCardGui = guiMap.get(stackedCard);
-    cardAnims.click(stackedCardGui);
+
+    if (stackedCardGui.hasClass('card-selected')) {
+      cardAnims.click({delegateTarget:stackedCardGui}, stackedCardGui);
+      stackedCardGui.trigger('mouseleave');
+    }
   }
 
   stack = new Array();

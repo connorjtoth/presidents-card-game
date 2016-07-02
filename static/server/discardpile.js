@@ -9,7 +9,7 @@ DiscardPile.prototype.addPlay = function ( player, cards ) {
 }
 
 DiscardPile.prototype.getPlay = function ( n ) {
-  return this.plays[plays.length - 1 - n];
+  return this.plays[this.plays.length - 1 - n];
 }
 
 DiscardPile.prototype.playCount = function ( ) {
@@ -28,7 +28,7 @@ DiscardPile.prototype.lastFourSame = function ( ) {
   var i = 0;
   while (lastFour.length < 4 && i < this.playCount() ) {
     var tempPlay = this.getPlay(i);
-    for (var j = 0; j < min(tempPlay.cards.length, 4 - lastFour.length); j++) {
+    for (var j = 0; j < Math.min(tempPlay.cards.length, 4 - lastFour.length); j++) {
       lastFour.push(tempPlay.cards[j]);
     }
     i++;
