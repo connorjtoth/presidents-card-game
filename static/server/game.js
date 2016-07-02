@@ -97,13 +97,10 @@ Game.prototype.orderPlayers = function ( players ) {
     var starts = false;
 
     for (var card of player.hand) {
-      console.log(card, ' vs ', STARTING_CARD);
       if (isEqual(STARTING_CARD, card)) {
         starts = true;
-        console.log('true');
         break;
       }
-      console.log('false');
     }
 
     if (first < 0 && starts) {
@@ -213,9 +210,7 @@ Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
       return true;
     });
     player.updateClientHand();
-
-    var playDetails = new PlayStruct(player, cardsArr);
-    game.discardPile.addPlay(playDetails);
+    game.discard.addPlay(player, cardsArr);
     game.endMove(callback);
   }
   catch (err) {
@@ -360,7 +355,7 @@ Game.prototype.validateMove = function ( moveCards ) {
 
   //ensure card is valid wrt discard pile
   else {
-    lastPlayedRank = discardPile[0];
+    lastPlayedRank = game.discard.getRank(0);
     if (firstRank < lastPlayedRank) {
       throw new Error(player.name + ' must play greater or equal rank cards');
     }
@@ -379,7 +374,6 @@ Game.prototype.startRound = function ( ) {
   var game = this;
   game.round = {quantity: 0, first: true};
 
-  // MID ROUD
   game.getMove();
 }
 
