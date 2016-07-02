@@ -194,30 +194,31 @@ Game.prototype.skipPlayers = function ( n ) {
 
 Game.prototype.onCardsSubmitted = function ( cardsArr, callback ) {
   var game = this;
-  console.log('on cards submitted');
   var player = game.currentPlayer;
+  console.log('on cards submitted');
   console.log('cards chosen: ', cardsArr);
 
   try {
     game.validateMove(cardsArr);
 
     //remove cards in cardsArr
-    player.hand = player.hand.filter(function (val) {
-      for ( var i = 0; i < cardsArr.length; i++ ) {
-        if ( isEqual(val, cardsArr[i]) )
+    player.hand = player.hand.filter( function (val) {
+      for ( card of cardsArr ) {
+        if ( isEqual(val, card) )
           return false;
       }
       return true;
     });
+
     player.updateClientHand();
     game.discard.addPlay(player, cardsArr);
-    game.endMove(callback);
   }
   catch (err) {
-    console.log('cards are not valid');
-    player.socket.emit('message', "Error" + err);
+    player.socket.emit('message', "Error: " + err);
     console.log(err);
+    return;
   }
+  game.endMove(callback);
 };
 
 /* PLAYER MOVES */
@@ -251,26 +252,40 @@ Game.prototype.endMove = function ( callback ) {
 
   player.socket.removeAllListeners('card-choices');
   player.socket.emit('disallow-select-cards');
+
+  game.afterMove( callback );
 }
 
 Game.prototype.shouldEndRound = function ( ) {
+  var game = this;
+
+  if (!game.lastActivePlayer)
+    return false;
+
+  // this should be evaluated when lastActivePlayer is not who just played their card
+  // and currentPlayer is the player who just played their cards
+
   // end if player just played last card(s)
   if ( game.lastActivePlayer.hand.length === 0 ) {
+    console.log('last player has no more cards');
     return true;
   }
 
   // if last active player is the current player
   if ( game.lastActivePlayer === game.currentPlayer ) {
+    console.log('last player is the current player');
     return true;
   }
 
   // four of the same rank played in a row
   if (game.discard.lastFourSame()) {
+    console.log('last four are same');
     return true;
   }
 
   // a joker was played
   if (game.discard.getRank(0) === 14) {
+    console.log('joker played');
     return true;
   }
 
@@ -289,6 +304,9 @@ Game.prototype.afterMove = function ( callback ) {
     game.round.first = false;
 
   if ( !game.shouldEndRound() ) {
+
+    game.lastActivePlayer = game.currentPlayer;
+    console.log('not ending round');
     game.nextPlayer();
 
     //notify clients of changes
@@ -303,6 +321,8 @@ Game.prototype.afterMove = function ( callback ) {
 }
 
 Game.prototype.afterRound = function ( ) {
+  var game = this;
+  console.log('ending round');
   game.setPlayer(game.lastActivePlayer);
   
   // if out of cards, next player is going to be first player
