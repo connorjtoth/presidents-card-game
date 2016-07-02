@@ -91,3 +91,20 @@
   }
 
 }
+
+.cardback {
+  padding: 0;
+  position: absolute;
+  @include user-select(none);
+  
+  .center {
+    width: calc(100% - 5px);
+    height: calc(100% - 5px);
+  }
+
+  .gloss {
+    height: 100%;
+    opacity: 50%;
+    width: 100%;
+  }
+}

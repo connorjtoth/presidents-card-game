@@ -30,6 +30,30 @@ $( document ).ready( function ()
       return root + images.get(img);
     };
 
+    exports.cardBack = function ( ) {
+
+      var centerDiv = $(IMG_TAG)
+      .addClass('center')
+      .attr('src', getImagePath('back'));
+
+      /* the gloss element */
+      var glossImg = $(IMG_TAG)
+      .addClass('gloss')
+      .attr('src', getImagePath('gloss'));
+
+      /* the card / put it altogether */
+      var cardDiv = $(DIV_TAG)
+      .addClass('cardback')
+      .height('100%')
+      .append(centerDiv)
+      .append(glossImg)
+      .mouseenter(cardAnims.mouseenter)
+      .mouseleave(cardAnims.mouseleave)
+
+      cardDiv.width(cardDiv.height() * 6/8);
+      return cardDiv;
+    },
+
     exports.printCard = function ( card )
     {
       var rankDiv, imgDiv, topDiv, lowDiv,
@@ -106,8 +130,7 @@ var hideDiv = function ( jqDiv )
   .animate({opacity: 0}, 'slow');
 };
 
-var showDiv = function ( jqDiv )
-{
+var showDiv = function ( jqDiv ) {
   jqDiv
   .delay(500)
   .css('visibility', 'visible')
@@ -116,9 +139,9 @@ var showDiv = function ( jqDiv )
 var transitionBetween = function (outDiv, inDiv, remove)
 {
   hideDiv(outDiv);
-  setTimeout(function( )
-  {
-    if (remove) outDiv.remove();
+  setTimeout(function( ) {
+    if (remove)
+      outDiv.remove();
     showDiv(inDiv);
   }, 1000);
 };
@@ -128,39 +151,32 @@ var transitionBetween = function (outDiv, inDiv, remove)
 
 
 var cardAnims, btnAnims, anims, layout;
-$(document).ready(function()
-{
-  (function(exports)
-  {
+$(document).ready(function() {
+  (function(exports) {
 
-    exports.mouseenter = function()
-    {
+    exports.mouseenter = function() {
       $(this)
         .clearQueue()
         .animate({top: -50}, 300);
     };
 
-    exports.mouseleave = function()
-    {
+    exports.mouseleave = function() {
       $(this)
         .clearQueue()
         .animate({top: 0}, 300);
     };
 
-    exports.click = function( evt, card )
-    {
+    exports.click = function( evt, card ) {
       var target = evt.delegateTarget;
       var targetSelected = $(target).hasClass('card-selected');
-      if (targetSelected)
-      {
+      if (targetSelected) {
         $(target)
           .mouseenter(exports.mouseenter)
           .mouseleave(exports.mouseleave)
           .clearQueue()
           .removeClass('card-selected');
       }
-      else
-      {
+      else {
         $(target)
           .off('mouseenter')
           .off('mouseleave')
@@ -171,10 +187,8 @@ $(document).ready(function()
     }
   })(cardAnims = {});
 
-  (function ( exports )
-  {
-    exports.positionCards = function( cardGuis )
-    {
+  (function ( exports ) {
+    exports.positionCards = function( cardGuis ) {
       var invDiv = $('.inventory');
 
       var invWidth = invDiv.width(),
@@ -183,8 +197,7 @@ $(document).ready(function()
           cardRatio = cardWidth / invWidth,
           phi = (1 - cardRatio) / (cardGuis.length - 1);
 
-      for (var i = 0; i < cardGuis.length; i++)
-      {
+      for (var i = 0; i < cardGuis.length; i++) {
         var pos = phi * i * 100;
         cardGuis[i]
         .css('left', pos + '%')

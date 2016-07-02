@@ -132,7 +132,8 @@ Game.prototype.getLeaderboard = function ( ) {
       inGame: (game.players.inGame.indexOf(player) >= 0),
       username: player.name,
       rank: player.rank,
-      cards: player.hand.length
+      cards: player.hand.length,
+      active: player === game.currentPlayer
     };
 
     leaderstats.push(leaderstat);
@@ -283,6 +284,8 @@ Game.prototype.shouldEndRound = function ( ) {
   }
 
   // a joker was played
+  console.log(game.discard.getRank(0));
+
   if (game.discard.getRank(0) === 14) {
     console.log('joker played');
     return true;

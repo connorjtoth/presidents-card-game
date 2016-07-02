@@ -14,6 +14,10 @@ var createLeaderboardEntry = function ( leaderstat )
   var entry = $('<div>')
   .addClass('player-entry');
 
+  if (leaderstat.active)
+    entry.addClass('active');
+
+
   for (var prop of propMap.keys())
   {
     var field = $('<div>')

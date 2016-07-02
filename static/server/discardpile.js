@@ -24,20 +24,24 @@ DiscardPile.prototype.lastFourSame = function ( ) {
   if (this.playCount() === 0)
     return false;
 
-  var lastFour = new Array();
-  var i = 0;
-  while (lastFour.length < 4 && i < this.playCount() ) {
-    var tempPlay = this.getPlay(i);
-    for (var j = 0; j < Math.min(tempPlay.cards.length, 4 - lastFour.length); j++) {
-      lastFour.push(tempPlay.cards[j]);
+  var last = new Array();
+
+  for (var i = 0; i < this.playCount() && last.length < 4; i++) {
+    var temp = this.getPlay(i);
+    var limit = Math.min(temp.cards.length, 4 - last.length);
+    for (var j = 0; j < limit; j++) {
+      last.push(temp.cards[j]);
     }
-    i++;
   }
+
   if (lastFour.length < 4)
     return false;
-  return lastFour.every( function( card ) {
-    return card.rank === lastFour[0].rank;
-  });
+  else {
+    return last.every( function( card ) {
+      return card.rank === last[0].rank;
+    });
+  }
+
 }
 
 

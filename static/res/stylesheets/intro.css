@@ -271,6 +271,9 @@ body {
 .game-wrapper .player-list .player-entry:nth-of-type(even) {
   background-color: #ddd;
 }
+.game-wrapper .player-list .player-entry.active {
+  background-color: #0e0;
+}
 .game-wrapper .player-list .player-entry * {
   display: inline-block;
   /* font-size: 1rem; */
@@ -451,6 +454,24 @@ body {
 }
 .card#selected {
   top: -50px;
+}
+
+.cardback {
+  padding: 0;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cardback .center {
+  width: calc(100% - 5px);
+  height: calc(100% - 5px);
+}
+.cardback .gloss {
+  height: 100%;
+  opacity: 50%;
+  width: 100%;
 }
 
 .message-wrapper {
