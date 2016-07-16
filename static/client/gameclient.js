@@ -5,6 +5,9 @@ var gameClient = {};
 
 var createLeaderboardEntry = function ( leaderstat )
 {
+
+  // properties to display
+  // keys are the class, values are the value to show (formatted maybe?)
   var propMap = new Map([
     ['username', leaderstat.username],
     ['rank', leaderstat.rank],
@@ -14,12 +17,10 @@ var createLeaderboardEntry = function ( leaderstat )
   var entry = $('<div>')
   .addClass('player-entry');
 
-  if (leaderstat.active)
+  if ( leaderstat.active )
     entry.addClass('active');
 
-
-  for (var prop of propMap.keys())
-  {
+  for ( var prop of propMap.keys() ) {
     var field = $('<div>')
     .addClass(prop)
     .text(propMap.get(prop));
@@ -30,13 +31,11 @@ var createLeaderboardEntry = function ( leaderstat )
   return entry;
 };
 
-gameClient.printLeaderboard = function ( leaderstats )
-{
+gameClient.printLeaderboard = function ( leaderstats ) {
   var plrList = $('.player-list');
   plrList.empty();
   
-  for (var datum of leaderstats)
-  {
+  for ( var datum of leaderstats ) {
     var entry = createLeaderboardEntry(datum);
     plrList.append(entry);
   }

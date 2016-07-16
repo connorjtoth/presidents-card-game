@@ -277,6 +277,10 @@ Game.prototype.shouldEndRound = function ( ) {
     return true;
   }
 
+  if (game.discard.playCount() === 0) {
+    return false;
+  }
+
   // four of the same rank played in a row
   if (game.discard.lastFourSame()) {
     console.log('last four are same');
@@ -284,8 +288,6 @@ Game.prototype.shouldEndRound = function ( ) {
   }
 
   // a joker was played
-  console.log(game.discard.getRank(0));
-
   if (game.discard.getRank(0) === 14) {
     console.log('joker played');
     return true;
@@ -309,11 +311,14 @@ Game.prototype.afterMove = function ( callback ) {
 
     game.lastActivePlayer = game.currentPlayer;
     console.log('not ending round');
-    game.nextPlayer();
+    var skipCount = game.numPlayersToSkip();
+
+    for (var i = 0; i < skipCount + 1; i++) {
+      game.nextPlayer();
+    }
 
     //notify clients of changes
     game.updateLeaderboards();
-
     game.getMove();
   }
   else {

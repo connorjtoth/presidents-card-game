@@ -1,48 +1,63 @@
-/* Card animations and drawing */
+/**
+ * @file Provides modules that draw and animate cards 
+ * @author Connor J. Toth
+ */
+
+
+
+
 
 var DesignModule;
 
-var DIV_TAG = '<div>';
-var IMG_TAG = '<img>';
+$( document ).ready( function ( ) {
 
+  (function ( exports ) {
 
-$( document ).ready( function ()
-{
-  (function (exports)
-  {
-    var getImagePath = function ( img, ns )
-    {
-      var images, root;
-      if (ns === 'cards' || ns === undefined)
-      {
-        images = new Map([
-          ['H', 'heart.png'],
-          ['S', 'spade.png'],
-          ['C', 'club.png'],
-          ['D', 'diamond.png'],
-          ['J', 'joker.png'],
-          ['gloss', '../../gloss.png'],
-          ['back', 'back.png']
-        ]);
-        root = 'res/images/cards/icons/';
+    var getImagePath = function ( imgkey ) {
+      var root = 'res/images/cards/icons/';
+      var image_uri;
+
+      switch ( imgkey ) {
+        case 'H':
+          image_uri = 'heart.png';
+          break;
+        case 'S':
+          image_uri = 'spade.png';
+          break;
+        case 'C': 
+          image_uri = 'club.png';
+          break;
+        case 'D':
+          image_uri = 'diamond.png';
+          break;
+        case 'J':
+          image_uri = 'joker.png';
+          break;
+        case 'gloss':
+          image_uri = '../../gloss.png';
+          break;
+        case 'back':
+          image_uri = 'back.png';
+          break;
+        default:
+          throw new Error('imgkey ' + imgkey + ' unrecognized');
       }
 
-      return root + images.get(img);
+      return root + image_uri;
     };
 
     exports.cardBack = function ( ) {
-
-      var centerDiv = $(IMG_TAG)
+      var centerDiv = $('<img>')
       .addClass('center')
       .attr('src', getImagePath('back'));
 
       /* the gloss element */
-      var glossImg = $(IMG_TAG)
+      var glossImg = $('<img>')
       .addClass('gloss')
       .attr('src', getImagePath('gloss'));
 
       /* the card / put it altogether */
-      var cardDiv = $(DIV_TAG)
+      var cardDiv = $('<div>')
       .addClass('cardback')
       .height('100%')
       .append(centerDiv)
@@ -54,8 +69,7 @@ $( document ).ready( function ()
       return cardDiv;
     },
 
-    exports.printCard = function ( card )
-    {
+    exports.printCard = function ( card ) {
       var rankDiv, imgDiv, topDiv, lowDiv,
           centerImg, centerDiv, glossImg, cardDiv;
 
@@ -65,23 +79,22 @@ $( document ).ready( function ()
       var rankId = 'reg-rank', //default value
           centerSrc = getImagePath(suit); //default value
 
-      if (rank === 14)
-      { 
+      if ( rank === 14 ) { 
         rankId = 'joker-rank';
         centerSrc = getImagePath('J');
       }
 
       /* the top corner element */
-      rankDiv = $(DIV_TAG)
+      rankDiv = $('<div>')
       .addClass('rank')
       .attr('id', rankId)
       .text(card.rankText);
 
-      imgDiv = $(IMG_TAG)
+      imgDiv = $('<img>')
       .addClass('corner-img')
       .attr('src', getImagePath(suit));
 
-      topDiv = $(DIV_TAG)
+      topDiv = $('<div>')
       .addClass('corner')
       .attr('id', 'upper-corner')
       .append(rankDiv)
@@ -92,21 +105,21 @@ $( document ).ready( function ()
       .attr('id', 'lower-corner');
 
       /* the center element */
-      centerImg = $(IMG_TAG)
+      centerImg = $('<img>')
       .addClass('center-img')
       .attr('src', centerSrc);
 
-      centerDiv = $(DIV_TAG)
+      centerDiv = $('<div>')
       .addClass('center')
       .append(centerImg);
 
       /* the gloss element */
-      glossImg = $(IMG_TAG)
+      glossImg = $('<img>')
       .addClass('gloss')
       .attr('src', getImagePath('gloss'));
 
       /* the card / put it altogether */
-      cardDiv = $(DIV_TAG)
+      cardDiv = $('<div>')
       .addClass('card')
       .attr('id', card.id)
       .height('100%')
@@ -123,8 +136,7 @@ $( document ).ready( function ()
   })(DesignModule = {});
 });
 
-var hideDiv = function ( jqDiv )
-{
+var hideDiv = function ( jqDiv ) {
   jqDiv
   .delay(500)
   .animate({opacity: 0}, 'slow');
@@ -136,17 +148,15 @@ var showDiv = function ( jqDiv ) {
   .css('visibility', 'visible')
   .animate({opacity: 1}, 'slow');
 };
-var transitionBetween = function (outDiv, inDiv, remove)
-{
+
+var transitionBetween = function (outDiv, inDiv, remove) {
   hideDiv(outDiv);
-  setTimeout(function( ) {
-    if (remove)
-      outDiv.remove();
+  setTimeout( function( ) {
+    if ( remove )
+      outDiv.remove();  
     showDiv(inDiv);
   }, 1000);
 };
-
-
 
 
 
@@ -171,44 +181,50 @@ $(document).ready(function() {
       var targetSelected = $(target).hasClass('card-selected');
       if (targetSelected) {
         $(target)
-          .mouseenter(exports.mouseenter)
-          .mouseleave(exports.mouseleave)
-          .clearQueue()
-          .removeClass('card-selected');
+        .mouseenter(exports.mouseenter)
+        .mouseleave(exports.mouseleave)
+        .clearQueue()
+        .removeClass('card-selected');
       }
       else {
         $(target)
-          .off('mouseenter')
-          .off('mouseleave')
-          .clearQueue()
-          .css('top', '-50px')
-          .addClass('card-selected');
+        .off('mouseenter')
+        .off('mouseleave')
+        .clearQueue()
+        .css('top', '-50px')
+        .addClass('card-selected');
       }
     }
-  })(cardAnims = {});
+  })( cardAnims = {} );
 
-  (function ( exports ) {
-    exports.positionCards = function( cardGuis ) {
+  ( function ( exports ) {
+    exports.positionCards = function ( cardGuis ) {
+
       var invDiv = $('.inventory');
 
-      var invWidth = invDiv.width(),
-          invHeight = invDiv.height(),
-          cardWidth = .75 * invHeight,
-          cardRatio = cardWidth / invWidth,
-          phi = (1 - cardRatio) / (cardGuis.length - 1);
+      
+      var cardWidth = .75 * invDiv.height(),
 
-      for (var i = 0; i < cardGuis.length; i++) {
+      // ratio between card widths and their container
+          cardRatio = cardWidth / invDiv.width(),
+
+      // factor that represents a unit card offset amount
+          phi = (1 - cardRatio) / (cardGuis.length - 1);
+          
+
+      for ( var i = 0; i < cardGuis.length; i++ ) {
         var pos = phi * i * 100;
         cardGuis[i]
         .css('left', pos + '%')
         .width(cardWidth);
+
         //setZIndex(cardGuis[i], i);
-        //post it
+        
+        // actually displays the card
         invDiv.append(cardGuis[i]);
       }
     };
 
 
-  })(layout = {});
-
+  })( layout = {} );
 });
